@@ -1,6 +1,6 @@
 # Agent instructions and skills
 
-My shared instructions and selected skills for Codex and Claude Code. Edit each skill once. Both agents read the same files.
+Collection of my handpicked skills from all around the internet for Codex and Claude Code. Edit each skill once. Both agents read the same files.
 
 ## Install in a project
 
