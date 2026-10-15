@@ -9,11 +9,9 @@ Requires Git and Python 3.9 or newer. This setup uses symbolic links on macOS an
 Open a terminal in your project's root folder and run:
 
 ```sh
-git clone /Users/dominikhurcik/dev/skills .agent-instructions
+git clone https://github.com/dominik-hurcik/skills.git .agent-instructions
 python3 .agent-instructions/install.py
 ```
-
-The clone command above works on this Mac. To install on another machine, push this repository to a Git host and replace the local path with its clone URL.
 
 The installer creates these links in your project:
 
@@ -44,12 +42,6 @@ In Claude Code, start the message with the skill's slash command:
 ```text
 /unslop Rewrite this paragraph.
 /diagnosing-bugs Diagnose this error.
-```
-
-T3 Code may present commands differently. You can also explicitly ask the agent to read and apply a file:
-
-```text
-Read .agent-instructions/skills/unslop/SKILL.md and apply it to this paragraph.
 ```
 
 Installing a skill makes it available. It does not make every skill run on every response.
