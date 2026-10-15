@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
 """Link this collection into the project in the current directory."""
 
+import argparse
 import os
 import sys
 from pathlib import Path
 
 
-def install() -> None:
+def install(*, skills_only: bool = False) -> None:
     source = Path(__file__).resolve().parent
     project = Path.cwd().resolve()
     if source == project or not source.is_relative_to(project):
@@ -18,7 +19,9 @@ def install() -> None:
     if not skills:
         raise ValueError("No skills found in the collection.")
 
-    links = [(project / name, source / name) for name in ("AGENTS.md", "CLAUDE.md")]
+    links = []
+    if not skills_only:
+        links.extend((project / name, source / name) for name in ("AGENTS.md", "CLAUDE.md"))
     directories = []
     for agent in (".agents", ".claude"):
         directories.extend([project / agent, project / agent / "skills"])
@@ -41,7 +44,12 @@ def install() -> None:
         raise ValueError(
             "Installation stopped. No files changed.\n"
             + "\n".join(f"  {message}" for message in conflicts)
-            + "\nMerge existing instructions manually before replacing their files."
+            + "\nResolve the listed conflicts before retrying."
+            + (
+                "\nUse --skills-only to keep existing AGENTS.md and CLAUDE.md files."
+                if not skills_only
+                else ""
+            )
         )
 
     created = 0
@@ -56,13 +64,23 @@ def install() -> None:
             created += 1
 
     print(f"Connected {len(skills)} skills for Codex and Claude Code.")
-    print(f"Linked AGENTS.md and CLAUDE.md. Created {created} new links.")
-    print("Start a new agent session in this project to load the instructions.")
+    if skills_only:
+        print(f"Skills-only install. Created {created} new links.")
+    else:
+        print(f"Linked AGENTS.md and CLAUDE.md. Created {created} new links.")
+    print("Start a new agent session in this project to load the installed files.")
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--skills-only",
+        action="store_true",
+        help="Install skill links without reading or changing project AGENTS.md or CLAUDE.md files.",
+    )
+    arguments = parser.parse_args()
     try:
-        install()
+        install(skills_only=arguments.skills_only)
     except (OSError, ValueError) as error:
         print(error, file=sys.stderr)
         sys.exit(1)

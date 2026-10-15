@@ -24,9 +24,31 @@ The installer creates these links in your project:
 
 Start a new agent session in the project after installation. Keep `.agent-instructions` inside the project, since the links point into it.
 
-If any destination contains an existing file or a different link, the installer stops before changing anything. Merge your existing instructions manually before replacing those files.
+If any destination contains an existing file or a different link, the installer stops before changing anything. To keep your repo's existing instructions, use `--skills-only`.
 
 For a personal install, add `.agent-instructions/` to the project's `.gitignore` so Git skips the nested clone. Each new checkout needs its own installation.
+
+## Install only skills
+
+Use this mode when your repo already has custom `AGENTS.md` or `CLAUDE.md` instructions that you want to keep.
+
+For a first installation, run these commands from your project's root:
+
+```sh
+git clone https://github.com/dominik-hurcik/skills.git .agent-instructions
+python3 .agent-instructions/install.py --skills-only
+```
+
+If `.agent-instructions` already exists, update it and run:
+
+```sh
+git -C .agent-instructions pull --ff-only
+python3 .agent-instructions/install.py --skills-only
+```
+
+This mode adds links under `.agents/skills` and `.claude/skills`. It leaves `AGENTS.md` and `CLAUDE.md` untouched and does not create them if they are missing. Existing skills with conflicting names still stop installation before any changes.
+
+Use `--skills-only` each time you rerun the installer for this project. Start a new agent session after installation to pick up the skills.
 
 ## Use a skill
 
@@ -68,6 +90,8 @@ Installing a skill makes it available. It does not make every skill run on every
    git -C .agent-instructions pull --ff-only
    python3 .agent-instructions/install.py
    ```
+
+   For a skills-only installation, add `--skills-only` to the installer command each time.
 
 The installer adds links for new skills and keeps existing links. Changes to an existing skill take effect as soon as its files are updated in the project's clone. Start a new agent session if it still uses the old instructions.
 
