@@ -55,15 +55,13 @@ Use `--skills-only` each time you rerun the installer for this project. Start a 
 In Codex CLI or its IDE extension, mention the skill with `$`:
 
 ```text
-$unslop Rewrite this paragraph.
-$diagnosing-bugs Diagnose this error.
+$skill-name Describe the task.
 ```
 
 In Claude Code, start the message with the skill's slash command:
 
 ```text
-/unslop Rewrite this paragraph.
-/diagnosing-bugs Diagnose this error.
+/skill-name Describe the task.
 ```
 
 Installing a skill makes it available. It does not make every skill run on every response.
@@ -83,8 +81,10 @@ Installing a skill makes it available. It does not make every skill run on every
    ```
 
 3. Keep any scripts, references, and assets inside that skill's folder.
-4. Commit the new skill to this repository.
-5. In each installed project, pull the update and rerun the installer:
+4. Write instructions that work in both agents. To use another skill, write "load the `other-skill` skill". Don't name agent-specific tools such as Claude Code's Skill tool, and don't use `/name` or `$name` syntax inside a skill.
+5. Set when the skill runs. See [Choose when a skill runs](#choose-when-a-skill-runs).
+6. Commit the new skill to this repository.
+7. In each installed project, pull the update and rerun the installer:
 
    ```sh
    git -C .agent-instructions pull --ff-only
@@ -93,7 +93,7 @@ Installing a skill makes it available. It does not make every skill run on every
 
    For a skills-only installation, add `--skills-only` to the installer command each time.
 
-The installer adds links for new skills and keeps existing links. Changes to an existing skill take effect as soon as its files are updated in the project's clone. Start a new agent session if it still uses the old instructions.
+The installer adds links for new skills, keeps existing links, and removes links to skills deleted from this collection. Changes to an existing skill take effect as soon as its files are updated in the project's clone. Start a new agent session if it still uses the old instructions.
 
 ## Choose when a skill runs
 
@@ -101,7 +101,9 @@ Agents can select a skill when its description matches the task. You can also re
 
 Claude Code uses `disable-model-invocation: true` in `SKILL.md` to make a skill manual-only. Codex uses `policy.allow_implicit_invocation: false` in that skill's `agents/openai.yaml` for the same purpose. Configure both if you want the same behavior in both agents.
 
-Six skills in this collection currently have the Claude manual-only setting. `diagnosing-bugs` allows automatic selection. The Codex settings have not been aligned with those manual-only settings.
+A skill without either setting can run automatically in both agents. When you add or change a skill, check both files. A setting in only one file makes the skill manual-only in one agent and automatic in the other.
+
+A skill that other skills load must allow automatic selection. A manual-only skill can't be loaded by the agent, only by you.
 
 For behavior you want on every response, add a rule to `AGENTS.md` and allow the agent to invoke the required skill. Skill matching alone does not guarantee that behavior.
 
@@ -110,10 +112,6 @@ For behavior you want on every response, add a rule to `AGENTS.md` and allow the
 Edit `AGENTS.md`. `CLAUDE.md` contains `@AGENTS.md`, so Claude Code imports the same instructions.
 
 Commit changes in the source repository, then pull them into each project's `.agent-instructions` clone. Existing links continue to work.
-
-## Skills that need adaptation
-
-Some skills came from Cursor's pstack collection. `why` still refers to Cursor tools, Cursor model settings, and companion workflows outside this collection. Those instructions need adaptation for Codex and Claude Code.
 
 ## References
 

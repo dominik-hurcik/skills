@@ -55,6 +55,17 @@ def install(*, skills_only: bool = False) -> None:
     created = 0
     for directory in directories:
         directory.mkdir(parents=True, exist_ok=True)
+
+    # Remove links to skills that were deleted from the collection.
+    removed = 0
+    for agent in (".agents", ".claude"):
+        for link in (project / agent / "skills").iterdir():
+            if link.is_symlink() and not link.exists():
+                target = (link.parent / os.readlink(link)).resolve()
+                if target.parent == source / "skills":
+                    link.unlink()
+                    removed += 1
+
     for destination, target in links:
         if not destination.is_symlink():
             destination.symlink_to(
@@ -68,6 +79,8 @@ def install(*, skills_only: bool = False) -> None:
         print(f"Skills-only install. Created {created} new links.")
     else:
         print(f"Linked AGENTS.md and CLAUDE.md. Created {created} new links.")
+    if removed:
+        print(f"Removed {removed} links to deleted skills.")
     print("Start a new agent session in this project to load the installed files.")
 
 
