@@ -2,6 +2,84 @@
 
 Collection of my handpicked skills from all around the internet for Codex and Claude Code. Edit each skill once. Both agents read the same files.
 
+## Skills
+
+This collection has 35 skills in six categories. Each skill name starts with its category. Automatic skills can run when the task matches their description. Manual skills run only when you call them by name. See [Choose when a skill runs](#choose-when-a-skill-runs).
+
+| Category | Skills | What they cover |
+| --- | --- | --- |
+| `engineering-` | 6 | Designing, debugging, and reviewing code |
+| `planning-` | 3 | Working out what to build before building it |
+| `writing-` | 3 | Docs standards and plain, human prose |
+| `learning-` | 1 | Learning a new concept |
+| `research-` | 1 | Researching recent public discussion |
+| `marketing-` | 21 | Growth, SEO, conversion, pricing, and lifecycle marketing |
+
+### Engineering
+
+| Skill | Runs | What it does |
+| --- | --- | --- |
+| `engineering-blast-radius` | Manual | Finds what a change could break outside the diff, and proves the change is safe by running real code. |
+| `engineering-codebase-design` | Automatic | Gives a shared vocabulary for designing deep modules, interfaces, and seams. |
+| `engineering-diagnosing-bugs` | Automatic | Runs a diagnosis loop for hard bugs and performance regressions. |
+| `engineering-domain-modeling` | Automatic | Builds a project's domain model, its `GLOSSARY.md`, and its ADRs. |
+| `engineering-improve-codebase-architecture` | Manual | Scans a codebase for deepening opportunities, reports them as an HTML page, then grills through the one you pick. |
+| `engineering-retro` | Manual | Runs a retrospective on a coding session. |
+
+### Planning
+
+| Skill | Runs | What it does |
+| --- | --- | --- |
+| `planning-brainstorming` | Automatic | Asks what you want and why before any creative work, then writes a design you approve before anything gets built. |
+| `planning-grilling` | Automatic | Stress-tests a plan, decision, or idea one round of questions at a time. |
+| `planning-sharpen` | Manual | Sharpens a task before starting: the expert approach, the real goal, and the right level of detail. |
+
+### Writing
+
+| Skill | Runs | What it does |
+| --- | --- | --- |
+| `writing-bro` | Manual | Restates the last message in plain language, with no jargon. |
+| `writing-technical-writing` | Automatic | Applies a technical-writing standard to docs, RFCs, readmes, PR descriptions, and commit messages. |
+| `writing-unslop` | Automatic | Cuts AI tells from any writing. |
+
+### Learning
+
+| Skill | Runs | What it does |
+| --- | --- | --- |
+| `learning-teach` | Manual | Teaches a new skill or concept in a guided workspace. |
+
+### Research
+
+| Skill | Runs | What it does |
+| --- | --- | --- |
+| `research-last30days` | Manual | Researches what people said about a topic in the last 30 days on Reddit, X, YouTube, TikTok, Hacker News, Polymarket, GitHub, and the web. Needs Python 3.12 or newer. |
+
+### Marketing
+
+| Skill | Runs | What it does |
+| --- | --- | --- |
+| `marketing-ads` | Automatic | Plans and audits paid campaigns on Google, Meta, LinkedIn, X, and other ad platforms. |
+| `marketing-ai-seo` | Automatic | Optimizes content so AI search engines and LLMs cite it. |
+| `marketing-analytics` | Automatic | Sets up and audits analytics tracking, such as GA4, events, and UTMs. |
+| `marketing-app-store-listing` | Automatic | Audits and improves an App Store or Google Play listing. |
+| `marketing-churn-prevention` | Automatic | Builds cancel flows, save offers, and failed-payment recovery. |
+| `marketing-content-strategy` | Automatic | Plans what content to create and which topics to cover. |
+| `marketing-cro` | Automatic | Improves conversion on marketing pages and forms. |
+| `marketing-customer-research` | Automatic | Runs and synthesizes customer research, such as interviews, reviews, and ICP work. |
+| `marketing-directory-submissions` | Automatic | Submits a product to startup, SaaS, AI, and review directories. |
+| `marketing-emails` | Automatic | Writes and improves email sequences and lifecycle flows. |
+| `marketing-image` | Automatic | Creates and edits marketing images, such as blog heroes, social graphics, and mockups. |
+| `marketing-launch` | Automatic | Plans product launches, feature announcements, and Product Hunt. |
+| `marketing-onboarding` | Automatic | Improves post-signup onboarding and activation. |
+| `marketing-paywalls` | Automatic | Designs in-app paywalls, upgrade screens, and feature gates. |
+| `marketing-popups` | Automatic | Designs popups, modals, slide-ins, and banners that convert. |
+| `marketing-pricing` | Automatic | Decides pricing, packaging, and monetization. |
+| `marketing-programmatic-seo` | Automatic | Builds SEO pages at scale from templates and data. |
+| `marketing-seo-audit` | Automatic | Audits a site for technical and on-page SEO issues. |
+| `marketing-signup` | Automatic | Improves signup, registration, and trial activation flows. |
+| `marketing-site-architecture` | Automatic | Plans page hierarchy, navigation, URL structure, and internal links. |
+| `marketing-social` | Automatic | Creates and schedules social posts, and runs social listening. |
+
 ## Install in a project
 
 Requires Git and Python 3.9 or newer. This setup uses symbolic links on macOS and Linux.
@@ -68,12 +146,12 @@ Installing a skill makes it available. It does not make every skill run on every
 
 ## Add a skill
 
-1. Create a folder under `skills/`, such as `skills/my-skill/`.
+1. Create a folder under `skills/` whose name starts with the skill's category, such as `skills/engineering-my-skill/`. Use the same name in the `name` field of `SKILL.md`, and add the skill to the tables in [Skills](#skills).
 2. Add a `SKILL.md` file with a name, description, and instructions:
 
    ```md
    ---
-   name: my-skill
+   name: engineering-my-skill
    description: Explain when the agent should use this skill.
    ---
 
