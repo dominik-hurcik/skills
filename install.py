@@ -423,6 +423,11 @@ def remove_install(target: Target) -> list:
                 remove_link(entry)
                 count += 1
     done.append(f"Removed {count} skill links.")
+    for directory in target.skill_dirs:
+        # Remove skills/ and its parent, such as .claude, only if nothing else is in them.
+        for folder in (directory, directory.parent):
+            if folder.is_dir() and not is_link(folder) and not any(folder.iterdir()):
+                folder.rmdir()
     for path in (target.codex_file, target.claude_file):
         backup = backup_path(path)
         if target.ours(path):
