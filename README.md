@@ -37,11 +37,18 @@ Answer the questions, then start a new agent session.
 
 ### Install on Windows
 
-Open PowerShell and run:
+In PowerShell, run:
 
 ```powershell
 git clone https://github.com/dominik-hurcik/skills.git $HOME\agent-skills
 py $HOME\agent-skills\install.py
+```
+
+In Command Prompt, run these instead. Command Prompt doesn't know `$HOME`, so the PowerShell commands would make a folder named `$HOME` wherever you are.
+
+```bat
+git clone https://github.com/dominik-hurcik/skills.git "%USERPROFILE%\agent-skills"
+py "%USERPROFILE%\agent-skills\install.py"
 ```
 
 If `py` isn't found, use `python` instead. Answer the questions, then start a new agent session.
@@ -79,10 +86,16 @@ On macOS:
 python3 ~/agent-skills/install.py
 ```
 
-On Windows:
+On Windows, in PowerShell:
 
 ```powershell
 py $HOME\agent-skills\install.py
+```
+
+On Windows, in Command Prompt:
+
+```bat
+py "%USERPROFILE%\agent-skills\install.py"
 ```
 
 For a project install, run `.agent-instructions/install.py` from inside the project instead.

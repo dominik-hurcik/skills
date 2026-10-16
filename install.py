@@ -384,7 +384,11 @@ def back_up(path: Path) -> str:
 
 def gitignore_lines(target: Target, wrote_codex: bool, wrote_claude: bool) -> list:
     """Build the block from the skills found now, so new skills are always covered."""
-    lines = [f"/{PROJECT_CLONE}/"]
+    try:
+        clone = target.source.relative_to(target.root).as_posix()
+    except ValueError:
+        clone = PROJECT_CLONE
+    lines = [f"/{clone}/"]
     prefixed = all(skill.name.startswith("dh-") for skill in target.skills)
     for folder in (".agents/skills", ".claude/skills"):
         if prefixed:
@@ -569,6 +573,8 @@ def run(args) -> None:
     if action == "remove":
         # Removing never downloads anything. It needs the copy the install points to.
         candidates = [script_dir, Path.home() / USER_CLONE] if mode == "user" else [root / PROJECT_CLONE]
+        if mode == "project" and root in script_dir.parents:
+            candidates.insert(0, script_dir)
         source = next((c.resolve() for c in candidates if is_collection(c)), None)
         if source is None:
             raise Stop(f"Couldn't find the collection for this {mode}-mode install, so there's nothing to remove.")
@@ -581,6 +587,13 @@ def run(args) -> None:
         return
 
     source = locate_source(mode, root)
+    unfilled = [part for part in source.parts if part.startswith(("$", "%"))]
+    if unfilled:
+        raise Stop(
+            f"The collection is in a folder named {unfilled[0]}:\n  {source}\n"
+            f"Your terminal didn't fill in {unfilled[0]}, so Git made a folder with that name. "
+            "This happens when you paste the PowerShell commands into Command Prompt. "
+            "Delete that folder, then use the commands for your terminal from the README. Nothing changed.")
     target = Target(mode, root, source)
     if not target.skills:
         raise Stop(f"No skills found in {source}.")
