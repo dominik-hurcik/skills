@@ -40,8 +40,8 @@ Answer the questions, then start a new agent session.
 Open PowerShell and run:
 
 ```powershell
-git clone https://github.com/dominik-hurcik/skills.git $HOMEgent-skills
-py $HOMEgent-skills\install.py
+git clone https://github.com/dominik-hurcik/skills.git $HOME\agent-skills
+py $HOME\agent-skills\install.py
 ```
 
 If `py` isn't found, use `python` instead. Answer the questions, then start a new agent session.
@@ -82,7 +82,7 @@ python3 ~/agent-skills/install.py
 On Windows:
 
 ```powershell
-py $HOMEgent-skills\install.py
+py $HOME\agent-skills\install.py
 ```
 
 For a project install, run `.agent-instructions/install.py` from inside the project instead.
