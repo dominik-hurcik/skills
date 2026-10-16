@@ -1,19 +1,89 @@
 #!/usr/bin/env python3
-"""Install this collection's skills and shared instructions for Codex and Claude Code.
+"""Install, update, or remove this skill collection for Codex and Claude Code.
 
-Project mode (the default) installs into the project in the current directory.
-User mode installs into your home folder, so every project on this machine gets them.
-Works on macOS, Linux, and Windows.
+Run it with no options and it asks you what to do. It works on macOS, Linux, and Windows.
+
+  python3 install.py
+
+You can also run this file on its own, without cloning the collection first.
+It then downloads the collection for you.
+
+Options skip the questions, for scripts:
+
+  --user            install for every project on this computer
+  --project         install into the Git repository in the current folder
+  --remove          remove an install (combine with --user or --project)
+  --skills-only     install skills only, not the shared instructions
+  --gitignore       in project mode, add the installed files to .gitignore
+  --no-gitignore    in project mode, leave .gitignore alone
+  --no-pull         don't fetch the latest version first
+  --yes             accept the recommended answer to every remaining question
 """
 
 import argparse
+import hashlib
 import os
+import shutil
 import stat
+import subprocess
 import sys
 from pathlib import Path
 
+REPO_URL = "https://github.com/dominik-hurcik/skills.git"
+USER_CLONE = "agent-skills"
+PROJECT_CLONE = ".agent-instructions"
 WINDOWS = os.name == "nt"
 MARKER = "<!-- Managed by install.py from "
+IMPORT_NOTE = "<!-- Added by install.py: loads the shared instructions -->"
+GITIGNORE_START = "# >>> agent skills (managed by install.py)"
+GITIGNORE_END = "# <<< agent skills"
+
+
+class Stop(Exception):
+    """Ends the run with a message and no changes."""
+
+
+# ---------- Questions ----------
+
+
+class Asker:
+    def __init__(self, assume_yes: bool):
+        self.assume_yes = assume_yes
+
+    def _read(self, prompt: str) -> str:
+        try:
+            return input(prompt).strip()
+        except EOFError:
+            raise Stop("No answer received. Run the installer in a terminal, or pass --yes.")
+
+    def choice(self, question: str, options: list, default: int) -> int:
+        """Return the 0-based index of the chosen option."""
+        if self.assume_yes:
+            return default
+        print(f"\n{question}")
+        for number, option in enumerate(options, 1):
+            print(f"  {number}) {option}" + ("  (recommended)" if number - 1 == default else ""))
+        while True:
+            answer = self._read(f"Choose 1-{len(options)} [{default + 1}]: ")
+            if not answer:
+                return default
+            if answer.isdigit() and 1 <= int(answer) <= len(options):
+                return int(answer) - 1
+            print(f"Please type a number from 1 to {len(options)}.")
+
+    def yes_no(self, question: str, default: bool) -> bool:
+        if self.assume_yes:
+            return default
+        hint = "Y/n" if default else "y/N"
+        while True:
+            answer = self._read(f"\n{question} [{hint}]: ").lower()
+            if not answer:
+                return default
+            if answer in ("y", "yes"):
+                return True
+            if answer in ("n", "no"):
+                return False
+            print("Please answer y or n.")
 
 
 # ---------- Links ----------
@@ -84,6 +154,10 @@ def is_managed(path: Path) -> bool:
         return False
 
 
+def points_into(path: Path, source: Path) -> bool:
+    return is_link(path) and link_target(path).parent == source.resolve()
+
+
 def import_line(destination: Path, target: Path) -> str:
     """A Claude Code @import that reaches target from destination's folder."""
     if destination.parent in target.parents:
@@ -100,137 +174,446 @@ def write_managed(destination: Path, body: str, source: Path) -> None:
         file.write(header + body)
 
 
+def read_text(path: Path) -> str:
+    return path.read_text(encoding="utf-8") if path.is_file() else ""
+
+
+def has_import(path: Path, line: str) -> bool:
+    return any(existing.strip() == line for existing in read_text(path).splitlines())
+
+
+# ---------- Git ----------
+
+
+def git(*args: str, cwd: Path = None, check: bool = True) -> subprocess.CompletedProcess:
+    if shutil.which("git") is None:
+        raise Stop("Git isn't installed. Install Git, then run the installer again.")
+    return subprocess.run(["git", *args], cwd=cwd, check=check, capture_output=True, text=True)
+
+
+def repo_root(folder: Path):
+    result = git("rev-parse", "--show-toplevel", cwd=folder, check=False)
+    return Path(result.stdout.strip()).resolve() if result.returncode == 0 else None
+
+
+def is_collection(folder: Path) -> bool:
+    return (folder / "skills").is_dir() and (folder / "AGENTS.md").is_file()
+
+
+def clone_to(target: Path) -> Path:
+    if is_collection(target):
+        return target.resolve()
+    if target.exists():
+        raise Stop(f"{target} already exists and isn't this collection. Move it away, then try again.")
+    print(f"\nDownloading the collection to {target} ...")
+    # Windows limits paths to 260 characters unless Git is told to allow longer ones.
+    options = ["-c", "core.longpaths=true"] if WINDOWS else []
+    result = git(*options, "clone", "--quiet", REPO_URL, str(target), check=False)
+    if result.returncode != 0 or not is_collection(target):
+        raise Stop("Couldn't download the collection.\n" + (result.stderr or result.stdout).strip())
+    if WINDOWS:
+        git("-C", str(target), "config", "core.longpaths", "true", check=False)
+    return target.resolve()
+
+
+def file_hash(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest() if path.is_file() else ""
+
+
+def pull_latest(source: Path, ask: Asker) -> bool:
+    """Pull the collection. Return True if install.py itself changed."""
+    if not (source / ".git").exists():
+        return False
+    if not ask.yes_no("Get the latest version of the collection first (git pull)?", True):
+        return False
+    before = file_hash(source / "install.py")
+    result = git("-C", str(source), "pull", "--ff-only", check=False)
+    if result.returncode != 0:
+        print("Couldn't pull the latest version. Continuing with the copy you have.")
+        print((result.stderr or result.stdout).strip())
+        return False
+    print("The collection is up to date.")
+    return file_hash(source / "install.py") != before
+
+
 # ---------- Plan ----------
 
 
-def plan(source: Path, mode: str, skills_only: bool):
-    """Return the skills, the skill folders, and the shared-instruction entries."""
-    skills = sorted(path.parent for path in (source / "skills").glob("*/SKILL.md"))
-    if not skills:
-        raise ValueError("No skills found in the collection.")
+class Target:
+    """Where an install goes, and the files it owns there."""
 
-    if mode == "project":
-        root = Path.cwd().resolve()
-        if source == root or root not in source.parents:
-            raise ValueError(
-                "Run project mode from your project root, with this collection cloned inside it. "
-                "To install for every project instead, use --user."
-            )
-        skill_dirs = [root / ".agents" / "skills", root / ".claude" / "skills"]
-        codex_file = root / "AGENTS.md"
-        claude_file = root / "CLAUDE.md"
-    else:
-        home = Path.home().resolve()
-        codex_home = Path(os.environ.get("CODEX_HOME") or home / ".codex")
-        skill_dirs = [home / ".agents" / "skills", home / ".claude" / "skills"]
-        codex_file = codex_home / "AGENTS.md"
-        claude_file = home / ".claude" / "CLAUDE.md"
+    def __init__(self, mode: str, root: Path, source: Path):
+        self.mode = mode
+        self.root = root
+        self.source = source
+        if mode == "user":
+            codex_home = Path(os.environ.get("CODEX_HOME") or root / ".codex")
+            self.skill_dirs = [root / ".agents" / "skills", root / ".claude" / "skills"]
+            self.codex_file = codex_home / "AGENTS.md"
+            self.claude_file = root / ".claude" / "CLAUDE.md"
+        else:
+            self.skill_dirs = [root / ".agents" / "skills", root / ".claude" / "skills"]
+            self.codex_file = root / "AGENTS.md"
+            self.claude_file = root / "CLAUDE.md"
+        self.relative = mode == "project"
+        self.skills = sorted(path.parent for path in (source / "skills").glob("*/SKILL.md"))
 
-    # Codex reads AGENTS.md as a file: a symlink, or a managed copy where symlinks aren't allowed.
-    # Claude Code gets a small CLAUDE.md that imports AGENTS.md, which works on every OS.
-    instructions = [] if skills_only else [("copy", codex_file), ("import", claude_file)]
-    return skills, skill_dirs, instructions
+    @property
+    def agents_md(self) -> Path:
+        return self.source / "AGENTS.md"
+
+    def ours(self, path: Path) -> bool:
+        """True if path is a link into the collection or a file this installer wrote."""
+        return is_managed(path) or (is_link(path) and link_target(path) in {
+            self.agents_md.resolve(), (self.source / "CLAUDE.md").resolve()})
 
 
-def instruction_ok(kind: str, destination: Path, source: Path) -> bool:
-    """True if destination is already ours: a managed file or a link into this collection."""
-    if is_managed(destination):
-        return True
-    if is_link(destination):
-        return link_target(destination) in {(source / "AGENTS.md").resolve(), (source / "CLAUDE.md").resolve()}
-    return False
+def skill_conflicts(target: Target) -> list:
+    conflicts = []
+    for directory in target.skill_dirs:
+        for folder in (directory.parent, directory):
+            if is_link(folder) or (folder.exists() and not folder.is_dir()):
+                conflicts.append(f"{folder} must be a real folder")
+        for skill in target.skills:
+            destination = directory / skill.name
+            if is_link(destination):
+                if link_target(destination) != skill.resolve():
+                    conflicts.append(f"{destination} points somewhere else")
+            elif destination.exists():
+                conflicts.append(f"{destination} already exists and isn't from this collection")
+    return sorted(set(conflicts))
 
 
 # ---------- Install ----------
 
 
-def install(*, mode: str, skills_only: bool) -> None:
-    source = Path(__file__).resolve().parent
-    agents_md = source / "AGENTS.md"
-    skills, skill_dirs, instructions = plan(source, mode, skills_only)
-    relative = mode == "project"
-
-    # Check every destination before changing anything.
-    conflicts = []
-    for directory in skill_dirs:
-        for folder in (directory.parent, directory):
-            if is_link(folder) or (folder.exists() and not folder.is_dir()):
-                conflicts.append(f"{folder} must be a real folder")
-        for skill in skills:
-            destination = directory / skill.name
-            if is_link(destination):
-                if link_target(destination) != skill.resolve():
-                    conflicts.append(f"{destination} points elsewhere")
-            elif destination.exists():
-                conflicts.append(f"{destination} already exists")
-    for kind, destination in instructions:
-        if (destination.exists() or is_link(destination)) and not instruction_ok(kind, destination, source):
-            conflicts.append(f"{destination} already exists")
-    if conflicts:
-        raise ValueError(
-            "Installation stopped. No files changed.\n"
-            + "\n".join(f"  {message}" for message in sorted(set(conflicts)))
-            + "\nResolve the listed conflicts before retrying."
-            + ("" if skills_only else "\nUse --skills-only to keep your existing AGENTS.md and CLAUDE.md files.")
-        )
-
-    for directory in skill_dirs:
+def link_skills(target: Target) -> tuple:
+    for directory in target.skill_dirs:
         directory.mkdir(parents=True, exist_ok=True)
-
-    # Remove links to skills that were deleted from the collection.
     removed = 0
-    skills_root = (source / "skills").resolve()
-    for directory in skill_dirs:
+    skills_root = (target.source / "skills").resolve()
+    for directory in target.skill_dirs:
         for entry in directory.iterdir():
             if is_link(entry) and not entry.exists() and link_target(entry).parent == skills_root:
                 remove_link(entry)
                 removed += 1
-
     created = 0
-    for directory in skill_dirs:
-        for skill in skills:
+    for directory in target.skill_dirs:
+        for skill in target.skills:
             destination = directory / skill.name
             if not is_link(destination):
-                link_directory(destination, skill, relative=relative)
+                link_directory(destination, skill, relative=target.relative)
                 created += 1
+    return created, removed
 
-    notes = []
-    for kind, destination in instructions:
-        destination.parent.mkdir(parents=True, exist_ok=True)
-        if is_link(destination):
-            continue  # Already a link into this collection.
-        if kind == "import":
-            write_managed(destination, import_line(destination, agents_md) + "\n", source)
-        elif destination.exists() or not try_link_file(destination, agents_md, relative=relative):
-            write_managed(destination, agents_md.read_text(encoding="utf-8"), source)
-            notes.append(
-                f"{destination} is a copy, because this system doesn't allow file links. "
-                "Rerun the installer after pulling to refresh it, or turn on Windows Developer Mode for a live link."
-            )
 
-    where = "this project" if mode == "project" else "your user folder, for every project"
-    print(f"Connected {len(skills)} skills for Codex and Claude Code in {where}.")
-    print(f"Created {created} new skill links." + ("" if skills_only else " Installed the shared instructions."))
-    if removed:
-        print(f"Removed {removed} links to deleted skills.")
-    for note in notes:
-        print(note)
-    print("Start a new agent session to load the installed files.")
+def install_codex_file(target: Target) -> str:
+    path = target.codex_file
+    path.parent.mkdir(parents=True, exist_ok=True)
+    if is_link(path):
+        return f"{path} already links to the shared instructions."
+    if path.exists() or not try_link_file(path, target.agents_md, relative=target.relative):
+        write_managed(path, target.agents_md.read_text(encoding="utf-8"), target.source)
+        return (f"{path} is a copy of the shared instructions, because this system doesn't allow file links. "
+                "Rerun the installer after updates to refresh it, or turn on Windows Developer Mode for a live link.")
+    return f"Linked {path} to the shared instructions."
+
+
+def install_claude_file(target: Target) -> str:
+    path = target.claude_file
+    path.parent.mkdir(parents=True, exist_ok=True)
+    line = import_line(path, target.agents_md)
+    if is_link(path):
+        return f"{path} already links to the shared instructions."
+    write_managed(path, line + "\n", target.source)
+    return f"Wrote {path}, which loads the shared instructions."
+
+
+def add_import(path: Path, line: str) -> str:
+    if has_import(path, line):
+        return f"{path} already loads the shared instructions."
+    text = read_text(path)
+    with path.open("a", encoding="utf-8", newline="\n") as file:
+        file.write(("" if text.endswith("\n") or not text else "\n") + f"\n{IMPORT_NOTE}\n{line}\n")
+    return f"Added one line to {path} that loads the shared instructions."
+
+
+def gitignore_lines(target: Target, wrote_codex: bool, wrote_claude: bool) -> list:
+    """Build the block from the skills found now, so new skills are always covered."""
+    lines = [f"/{PROJECT_CLONE}/"]
+    prefixed = all(skill.name.startswith("dh-") for skill in target.skills)
+    for folder in (".agents/skills", ".claude/skills"):
+        if prefixed:
+            lines.append(f"/{folder}/dh-*")
+        else:
+            lines.extend(f"/{folder}/{skill.name}" for skill in target.skills)
+    if wrote_codex:
+        lines.append("/AGENTS.md")
+    if wrote_claude:
+        lines.append("/CLAUDE.md")
+    return lines
+
+
+def update_gitignore(root: Path, lines: list) -> str:
+    path = root / ".gitignore"
+    existed = path.exists()
+    text = strip_gitignore_block(read_text(path))
+    block = "\n".join([GITIGNORE_START, *lines, GITIGNORE_END]) + "\n"
+    if text and not text.endswith("\n"):
+        text += "\n"
+    text = text + ("\n" if text.strip() else "") + block
+    with path.open("w", encoding="utf-8", newline="\n") as file:
+        file.write(text)
+    return f"{'Updated' if existed else 'Created'} {path}."
+
+
+def strip_gitignore_block(text: str) -> str:
+    out, inside = [], False
+    for line in text.splitlines(keepends=True):
+        if line.strip() == GITIGNORE_START:
+            inside = True
+            continue
+        if line.strip() == GITIGNORE_END:
+            inside = False
+            continue
+        if not inside:
+            out.append(line)
+    return "".join(out).rstrip("\n") + ("\n" if out else "")
+
+
+# ---------- Remove ----------
+
+
+def remove_install(target: Target) -> list:
+    done = []
+    count = 0
+    skills_root = (target.source / "skills").resolve()
+    for directory in target.skill_dirs:
+        if not directory.is_dir():
+            continue
+        for entry in directory.iterdir():
+            if is_link(entry) and link_target(entry).parent == skills_root:
+                remove_link(entry)
+                count += 1
+    done.append(f"Removed {count} skill links.")
+    for path in (target.codex_file, target.claude_file):
+        if target.ours(path):
+            remove_link(path) if is_link(path) else path.unlink()
+            done.append(f"Removed {path}.")
+        elif path.is_file() and IMPORT_NOTE in read_text(path):
+            lines = read_text(path).splitlines(keepends=True)
+            kept = []
+            skip_next = False
+            for line in lines:
+                if line.strip() == IMPORT_NOTE:
+                    skip_next = True
+                    continue
+                if skip_next:
+                    skip_next = False
+                    continue
+                kept.append(line)
+            path.write_text("".join(kept).rstrip("\n") + "\n", encoding="utf-8")
+            done.append(f"Removed the import line from {path}.")
+    gitignore = target.root / ".gitignore"
+    if target.mode == "project" and GITIGNORE_START in read_text(gitignore):
+        rest = strip_gitignore_block(read_text(gitignore))
+        if rest.strip():
+            gitignore.write_text(rest, encoding="utf-8")
+            done.append(f"Removed the agent skills block from {gitignore}.")
+        else:
+            gitignore.unlink()
+            done.append(f"Removed {gitignore}, which only held the agent skills block.")
+    done.append(f"The collection itself is still in {target.source}. Delete that folder if you don't need it.")
+    return done
+
+
+# ---------- Flow ----------
+
+
+def choose_mode(args, ask: Asker) -> tuple:
+    """Return (action, mode), where action is install or remove."""
+    if args.remove:
+        action = "remove"
+    elif args.user or args.project:
+        action = "install"
+    else:
+        picked = ask.choice(
+            "What do you want to do?",
+            ["Install or update for every project on this computer (user mode)",
+             "Install or update for one project only (project mode)",
+             "Remove an install"],
+            0)
+        if picked < 2:
+            return "install", ["user", "project"][picked]
+        action = "remove"
+    if args.user:
+        return action, "user"
+    if args.project:
+        return action, "project"
+    mode = ask.choice("Which install do you want to remove?",
+                      ["The one for every project (user mode)", "The one in a project (project mode)"], 0)
+    return action, ["user", "project"][mode]
+
+
+def confirm_project(ask: Asker) -> Path:
+    here = Path.cwd().resolve()
+    root = repo_root(here)
+    if root is None:
+        print(f"\nThe current folder isn't inside a Git repository:\n  {here}")
+        print("Project mode installs into a project's top folder. Open a terminal in your project, then run the installer again.")
+        if not ask.yes_no("Install into this folder anyway?", False):
+            raise Stop("Nothing changed.")
+        return here
+    if root != here:
+        print(f"\nYou're in a subfolder. The project's top folder is:\n  {root}")
+    else:
+        print(f"\nThe project's top folder is:\n  {root}")
+    if not ask.yes_no("Is this the project you want to install into?", True):
+        raise Stop("Nothing changed. Open a terminal in the right project, then run the installer again.")
+    return root
+
+
+def locate_source(mode: str, root: Path) -> Path:
+    """Find the collection, or download it to the right place."""
+    script_dir = Path(__file__).resolve().parent
+    if mode == "user":
+        if is_collection(script_dir):
+            return script_dir
+        return clone_to(Path.home() / USER_CLONE)
+    project_copy = root / PROJECT_CLONE
+    if is_collection(script_dir) and root in script_dir.parents:
+        return script_dir
+    if not is_collection(project_copy):
+        print(f"\nProject mode keeps its own copy of the collection inside the project, in {PROJECT_CLONE}/.")
+    return clone_to(project_copy)
+
+
+def run(args) -> None:
+    ask = Asker(args.yes)
+    print("Agent skills installer for Codex and Claude Code.")
+    script_dir = Path(__file__).resolve().parent
+    if is_collection(script_dir) and not args.no_pull:
+        if pull_latest(script_dir, ask):
+            print("The installer itself changed, so it's restarting with the new version.")
+            os.execv(sys.executable, [sys.executable, str(script_dir / "install.py"), *sys.argv[1:], "--no-pull"])
+
+    action, mode = choose_mode(args, ask)
+    root = confirm_project(ask) if mode == "project" else Path.home().resolve()
+
+    if action == "remove":
+        # Removing never downloads anything. It needs the copy the install points to.
+        candidates = [script_dir, Path.home() / USER_CLONE] if mode == "user" else [root / PROJECT_CLONE]
+        source = next((c.resolve() for c in candidates if is_collection(c)), None)
+        if source is None:
+            raise Stop(f"Couldn't find the collection for this {mode}-mode install, so there's nothing to remove.")
+        target = Target(mode, root, source)
+        if not ask.yes_no(f"Remove the {mode}-mode install from {root}?", True):
+            raise Stop("Nothing changed.")
+        print()
+        for line in remove_install(target):
+            print(line)
+        return
+
+    source = locate_source(mode, root)
+    target = Target(mode, root, source)
+    if not target.skills:
+        raise Stop(f"No skills found in {source}.")
+
+    conflicts = skill_conflicts(target)
+    if conflicts:
+        raise Stop("Installation stopped. Nothing changed.\n" + "\n".join(f"  {c}" for c in conflicts))
+
+    # Shared instructions.
+    install_instructions = not args.skills_only and ask.choice(
+        "Install my shared instructions (AGENTS.md) as well as the skills?",
+        ["Skills and shared instructions", "Skills only"], 0) == 0
+    codex_plan = claude_plan = None
+    if install_instructions:
+        codex_path, claude_path = target.codex_file, target.claude_file
+        if codex_path.exists() and not target.ours(codex_path):
+            print(f"\n{codex_path} already exists. The installer leaves it alone, so Codex won't get the shared "
+                  "instructions here. Codex can't load one file from another.")
+        else:
+            codex_plan = "install"
+        if claude_path.exists() and not target.ours(claude_path):
+            line = import_line(claude_path, target.agents_md)
+            if has_import(claude_path, line):
+                claude_plan = "keep"
+            elif ask.yes_no(f"{claude_path} already exists. Add one line to it that loads the shared "
+                            "instructions? Your own text stays as it is.", True):
+                claude_plan = "import"
+        else:
+            claude_plan = "install"
+
+    # .gitignore, project mode only.
+    use_gitignore = False
+    if mode == "project":
+        if args.gitignore:
+            use_gitignore = True
+        elif not args.no_gitignore:
+            use_gitignore = ask.yes_no(
+                "Add the installed files to the project's .gitignore, so they aren't committed? "
+                "Pick this if only you use these skills.", True)
+
+    # Summary before changing anything. Paths are shown relative to the project or home folder.
+    def short(path: Path) -> str:
+        try:
+            return ("~/" if mode == "user" else "") + path.resolve().relative_to(root).as_posix()
+        except ValueError:
+            return str(path)
+
+    print(f"\nThe installer will make these changes in {root}:")
+    print(f"  - link {len(target.skills)} skills into {short(target.skill_dirs[0])} and {short(target.skill_dirs[1])}")
+    if codex_plan:
+        print(f"  - install the shared instructions as {short(target.codex_file)}")
+    if claude_plan in ("install", "import"):
+        print(f"  - {'write' if claude_plan == 'install' else 'add one line to'} {short(target.claude_file)}")
+    if use_gitignore:
+        print(f"  - add the installed files to {short(root / '.gitignore')}")
+    if not ask.yes_no("Go ahead?", True):
+        raise Stop("Nothing changed.")
+
+    print()
+    created, removed = link_skills(target)
+    print(f"Linked {len(target.skills)} skills for both agents ({created} new links, {removed} old links removed).")
+    if codex_plan:
+        print(install_codex_file(target))
+    if claude_plan == "install":
+        print(install_claude_file(target))
+    elif claude_plan == "import":
+        print(add_import(target.claude_file, import_line(target.claude_file, target.agents_md)))
+    if use_gitignore:
+        print(update_gitignore(root, gitignore_lines(target, codex_plan == "install", claude_plan == "install")))
+    print("\nDone. Start a new agent session to load the skills.")
+    rerun = "python3" if not WINDOWS else "py"
+    print(f"To update later, run:  {rerun} {source / 'install.py'}")
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    where = parser.add_mutually_exclusive_group()
+    where.add_argument("--user", action="store_true", help="Install for every project on this computer.")
+    where.add_argument("--project", action="store_true", help="Install into the Git repository in the current folder.")
+    parser.add_argument("--remove", action="store_true", help="Remove an install instead.")
+    parser.add_argument("--skills-only", action="store_true", help="Install skills only, not the shared instructions.")
+    ignore = parser.add_mutually_exclusive_group()
+    ignore.add_argument("--gitignore", action="store_true", help="In project mode, add the installed files to .gitignore.")
+    ignore.add_argument("--no-gitignore", action="store_true", help="In project mode, leave .gitignore alone.")
+    parser.add_argument("--no-pull", action="store_true", help="Don't fetch the latest version first.")
+    parser.add_argument("--yes", action="store_true", help="Accept the recommended answer to every remaining question.")
+    args = parser.parse_args()
+    try:
+        run(args)
+    except Stop as stop:
+        print(f"\n{stop}", file=sys.stderr)
+        sys.exit(1)
+    except KeyboardInterrupt:
+        print("\nCancelled. Nothing more changed.", file=sys.stderr)
+        sys.exit(1)
+    except (OSError, subprocess.CalledProcessError) as error:
+        print(f"\n{error}", file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    target = parser.add_mutually_exclusive_group()
-    target.add_argument("--project", action="store_true", help="Install into the project in the current folder (default).")
-    target.add_argument("--user", action="store_true", help="Install into your home folder for every project.")
-    parser.add_argument(
-        "--skills-only",
-        action="store_true",
-        help="Install skills only. Leave AGENTS.md and CLAUDE.md files untouched.",
-    )
-    arguments = parser.parse_args()
-    try:
-        install(mode="user" if arguments.user else "project", skills_only=arguments.skills_only)
-    except (OSError, ValueError) as error:
-        print(error, file=sys.stderr)
-        sys.exit(1)
+    main()
