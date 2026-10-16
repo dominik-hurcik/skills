@@ -51,7 +51,10 @@ If `py` isn't found, use `python` instead. Answer the questions, then start a ne
 1. **Where to install.** Pick user mode for every project on this computer. Pick project mode for one project only. User mode is recommended.
 2. **Which project, in project mode.** Run the installer from inside your project. It finds the project's top folder and asks you to confirm it. It refuses a folder that isn't a Git repository, unless you say yes.
 3. **What to install.** Pick skills and my shared instructions, or skills only.
-4. **What to do with existing files.** If `CLAUDE.md` already exists, it offers to add one line that loads my instructions. Your own text stays. If `AGENTS.md` already exists, it leaves it alone, because Codex can't load one file from another.
+4. **What to do with your own instructions, if you already have some.** It asks once for `AGENTS.md` and once for `CLAUDE.md`:
+   - Keep yours and add mine. This is recommended. Your text stays on top. `AGENTS.md` gets a copy of mine at the end, in a marked part that every rerun refreshes. `CLAUDE.md` gets one line at the end that loads mine.
+   - Keep yours only. Nothing changes, and that agent won't get my instructions.
+   - Replace yours with mine. Yours are saved as `AGENTS.md.backup` or `CLAUDE.md.backup` first. Remove puts them back.
 5. **Whether to update `.gitignore`, in project mode.** Say yes if only you use these skills. It creates `.gitignore` if there's none, or adds a marked block to the end of yours.
 6. **Whether to go ahead.** It shows every change first, and changes nothing until you say yes.
 
@@ -86,7 +89,7 @@ For a project install, run `.agent-instructions/install.py` from inside the proj
 
 ### Remove
 
-Run the installer and pick "Remove an install". It removes the skill links, its own instruction files, the line it added to your `CLAUDE.md`, and its block in `.gitignore`. It leaves your own files alone. It keeps the downloaded collection, so you can delete that folder yourself.
+Run the installer and pick "Remove an install". It removes the skill links, its own instruction files, the part it added to your `AGENTS.md` or `CLAUDE.md`, and its block in `.gitignore`. If you picked replace, it puts your old files back. Your own text stays. It keeps the downloaded collection, so you can delete that folder yourself.
 
 ### Run it without questions
 

@@ -37,6 +37,9 @@ MARKER = "<!-- Managed by install.py from "
 IMPORT_NOTE = "<!-- Added by install.py: loads the shared instructions -->"
 GITIGNORE_START = "# >>> agent skills (managed by install.py)"
 GITIGNORE_END = "# <<< agent skills"
+BLOCK_START = "<!-- >>> shared instructions (managed by install.py, rerun it to refresh) -->"
+BLOCK_END = "<!-- <<< shared instructions -->"
+BACKUP_SUFFIX = ".backup"
 
 
 class Stop(Exception):
@@ -180,6 +183,30 @@ def read_text(path: Path) -> str:
 
 def has_import(path: Path, line: str) -> bool:
     return any(existing.strip() == line for existing in read_text(path).splitlines())
+
+
+def strip_block(text: str, start: str, end: str) -> str:
+    """Remove every block between start and end, markers included."""
+    out, inside = [], False
+    for line in text.splitlines(keepends=True):
+        if line.strip() == start:
+            inside = True
+            continue
+        if line.strip() == end:
+            inside = False
+            continue
+        if not inside:
+            out.append(line)
+    return "".join(out).rstrip("\n") + ("\n" if out else "")
+
+
+def write_text(path: Path, text: str) -> None:
+    with path.open("w", encoding="utf-8", newline="\n") as file:
+        file.write(text)
+
+
+def backup_path(path: Path) -> Path:
+    return path.with_name(path.name + BACKUP_SUFFIX)
 
 
 # ---------- Git ----------
@@ -338,6 +365,23 @@ def add_import(path: Path, line: str) -> str:
     return f"Added one line to {path} that loads the shared instructions."
 
 
+def append_block(path: Path, body: str) -> str:
+    """Put a copy of the shared instructions at the end of the user's own file, or refresh that copy."""
+    had_block = BLOCK_START in read_text(path)
+    text = strip_block(read_text(path), BLOCK_START, BLOCK_END)
+    block = f"{BLOCK_START}\n\n{body.strip()}\n\n{BLOCK_END}\n"
+    write_text(path, text + ("\n" if text.strip() else "") + block)
+    if had_block:
+        return f"Refreshed the shared instructions at the end of {path}."
+    return f"Added the shared instructions to the end of {path}. Your own text stays on top."
+
+
+def back_up(path: Path) -> str:
+    backup = backup_path(path)
+    os.replace(path, backup)
+    return f"Saved your old {path.name} as {backup}."
+
+
 def gitignore_lines(target: Target, wrote_codex: bool, wrote_claude: bool) -> list:
     """Build the block from the skills found now, so new skills are always covered."""
     lines = [f"/{PROJECT_CLONE}/"]
@@ -357,28 +401,10 @@ def gitignore_lines(target: Target, wrote_codex: bool, wrote_claude: bool) -> li
 def update_gitignore(root: Path, lines: list) -> str:
     path = root / ".gitignore"
     existed = path.exists()
-    text = strip_gitignore_block(read_text(path))
+    text = strip_block(read_text(path), GITIGNORE_START, GITIGNORE_END)
     block = "\n".join([GITIGNORE_START, *lines, GITIGNORE_END]) + "\n"
-    if text and not text.endswith("\n"):
-        text += "\n"
-    text = text + ("\n" if text.strip() else "") + block
-    with path.open("w", encoding="utf-8", newline="\n") as file:
-        file.write(text)
+    write_text(path, text + ("\n" if text.strip() else "") + block)
     return f"{'Updated' if existed else 'Created'} {path}."
-
-
-def strip_gitignore_block(text: str) -> str:
-    out, inside = [], False
-    for line in text.splitlines(keepends=True):
-        if line.strip() == GITIGNORE_START:
-            inside = True
-            continue
-        if line.strip() == GITIGNORE_END:
-            inside = False
-            continue
-        if not inside:
-            out.append(line)
-    return "".join(out).rstrip("\n") + ("\n" if out else "")
 
 
 # ---------- Remove ----------
@@ -397,10 +423,18 @@ def remove_install(target: Target) -> list:
                 count += 1
     done.append(f"Removed {count} skill links.")
     for path in (target.codex_file, target.claude_file):
+        backup = backup_path(path)
         if target.ours(path):
             remove_link(path) if is_link(path) else path.unlink()
             done.append(f"Removed {path}.")
-        elif path.is_file() and IMPORT_NOTE in read_text(path):
+            if backup.is_file():
+                os.replace(backup, path)
+                done.append(f"Put your old {path.name} back from {backup.name}.")
+            continue
+        if path.is_file() and BLOCK_START in read_text(path):
+            write_text(path, strip_block(read_text(path), BLOCK_START, BLOCK_END))
+            done.append(f"Removed the shared instructions from the end of {path}. Your own text stays.")
+        if path.is_file() and IMPORT_NOTE in read_text(path):
             lines = read_text(path).splitlines(keepends=True)
             kept = []
             skip_next = False
@@ -416,7 +450,7 @@ def remove_install(target: Target) -> list:
             done.append(f"Removed the import line from {path}.")
     gitignore = target.root / ".gitignore"
     if target.mode == "project" and GITIGNORE_START in read_text(gitignore):
-        rest = strip_gitignore_block(read_text(gitignore))
+        rest = strip_block(read_text(gitignore), GITIGNORE_START, GITIGNORE_END)
         if rest.strip():
             gitignore.write_text(rest, encoding="utf-8")
             done.append(f"Removed the agent skills block from {gitignore}.")
@@ -488,6 +522,38 @@ def locate_source(mode: str, root: Path) -> Path:
     return clone_to(project_copy)
 
 
+def imports_file(path: Path, other: Path) -> bool:
+    """True if path already loads other with an @import, such as a CLAUDE.md that holds @AGENTS.md."""
+    return path.parent == other.parent and has_import(path, "@" + other.name)
+
+
+def plan_existing(path: Path, target: Target, ask: Asker, agent: str):
+    """Decide what to do with one instructions file. Return install, add, replace, or None to leave it alone."""
+    if not path.exists() or target.ours(path):
+        return "install"
+    text = read_text(path)
+    if BLOCK_START in text or IMPORT_NOTE in text or has_import(path, import_line(path, target.agents_md)):
+        print(f"\n{path} holds your own text and the shared instructions. The installer refreshes its part only.")
+        return "add"
+    backup = backup_path(path)
+    how = ("a copy of mine goes at the end, in a marked part the installer refreshes on every run"
+           if path == target.codex_file else "one line goes at the end that loads mine")
+    picked = ask.choice(
+        f"You already have your own instructions for {agent} in:\n  {path}\nWhat should happen to them?",
+        [f"Keep yours and add mine. Yours stay on top, and {how}.",
+         f"Keep yours only. {agent} won't get my instructions here.",
+         f"Replace yours with mine. Yours are saved as {backup.name}, and remove puts them back."],
+        0)
+    if picked == 1:
+        return None
+    if picked == 2:
+        if backup.exists():
+            raise Stop(f"{backup} already exists, so there's no safe place for your old file. "
+                       "Move it away, then try again. Nothing changed.")
+        return "replace"
+    return "add"
+
+
 def run(args) -> None:
     ask = Asker(args.yes)
     print("Agent skills installer for Codex and Claude Code.")
@@ -529,21 +595,12 @@ def run(args) -> None:
         ["Skills and shared instructions", "Skills only"], 0) == 0
     codex_plan = claude_plan = None
     if install_instructions:
-        codex_path, claude_path = target.codex_file, target.claude_file
-        if codex_path.exists() and not target.ours(codex_path):
-            print(f"\n{codex_path} already exists. The installer leaves it alone, so Codex won't get the shared "
-                  "instructions here. Codex can't load one file from another.")
+        codex_plan = plan_existing(target.codex_file, target, ask, "Codex")
+        if codex_plan in ("install", "add", "replace") and imports_file(target.claude_file, target.codex_file):
+            print(f"\n{target.claude_file.name} already loads {target.codex_file.name}, so Claude Code gets the "
+                  "shared instructions from there. It needs no change.")
         else:
-            codex_plan = "install"
-        if claude_path.exists() and not target.ours(claude_path):
-            line = import_line(claude_path, target.agents_md)
-            if has_import(claude_path, line):
-                claude_plan = "keep"
-            elif ask.yes_no(f"{claude_path} already exists. Add one line to it that loads the shared "
-                            "instructions? Your own text stays as it is.", True):
-                claude_plan = "import"
-        else:
-            claude_plan = "install"
+            claude_plan = plan_existing(target.claude_file, target, ask, "Claude Code")
 
     # .gitignore, project mode only.
     use_gitignore = False
@@ -564,10 +621,13 @@ def run(args) -> None:
 
     print(f"\nThe installer will make these changes in {root}:")
     print(f"  - link {len(target.skills)} skills into {short(target.skill_dirs[0])} and {short(target.skill_dirs[1])}")
-    if codex_plan:
-        print(f"  - install the shared instructions as {short(target.codex_file)}")
-    if claude_plan in ("install", "import"):
-        print(f"  - {'write' if claude_plan == 'install' else 'add one line to'} {short(target.claude_file)}")
+    for path, plan in ((target.codex_file, codex_plan), (target.claude_file, claude_plan)):
+        if plan == "install":
+            print(f"  - write {short(path)}, which loads the shared instructions")
+        elif plan == "add":
+            print(f"  - add the shared instructions to the end of {short(path)}, below your own text")
+        elif plan == "replace":
+            print(f"  - save your {short(path)} as {short(backup_path(path))}, then write mine in its place")
     if use_gitignore:
         print(f"  - add the installed files to {short(root / '.gitignore')}")
     if not ask.yes_no("Go ahead?", True):
@@ -576,11 +636,17 @@ def run(args) -> None:
     print()
     created, removed = link_skills(target)
     print(f"Linked {len(target.skills)} skills for both agents ({created} new links, {removed} old links removed).")
-    if codex_plan:
+    if codex_plan == "replace":
+        print(back_up(target.codex_file))
+    if codex_plan in ("install", "replace"):
         print(install_codex_file(target))
-    if claude_plan == "install":
+    elif codex_plan == "add":
+        print(append_block(target.codex_file, target.agents_md.read_text(encoding="utf-8")))
+    if claude_plan == "replace":
+        print(back_up(target.claude_file))
+    if claude_plan in ("install", "replace"):
         print(install_claude_file(target))
-    elif claude_plan == "import":
+    elif claude_plan == "add":
         print(add_import(target.claude_file, import_line(target.claude_file, target.agents_md)))
     if use_gitignore:
         print(update_gitignore(root, gitignore_lines(target, codex_plan == "install", claude_plan == "install")))
