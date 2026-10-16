@@ -1,0 +1,5 @@
+interface:
+  display_name: "Slovak Contract Law"
+  short_description: "Review and draft B2B, IT, and SaaS contracts under Slovak law"
+policy:
+  allow_implicit_invocation: false

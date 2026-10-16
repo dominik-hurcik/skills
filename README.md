@@ -4,7 +4,7 @@ Collection of my handpicked skills from all around the internet for Codex and Cl
 
 ## Skills
 
-This collection has 58 skills in seven categories. Each skill name starts with its category. Automatic skills can run when the task matches their description. Manual skills run only when you call them by name. See [Choose when a skill runs](#choose-when-a-skill-runs).
+This collection has 60 skills in seven categories. Each skill name starts with its category. Automatic skills can run when the task matches their description. Manual skills run only when you call them by name. See [Choose when a skill runs](#choose-when-a-skill-runs).
 
 | Category | Skills | What they cover |
 | --- | --- | --- |
@@ -14,7 +14,7 @@ This collection has 58 skills in seven categories. Each skill name starts with i
 | `learning-` | 1 | Learning a new concept |
 | `research-` | 1 | Researching recent public discussion |
 | `marketing-` | 21 | Growth, SEO, conversion, pricing, and lifecycle marketing |
-| `legal-` | 22 | Policies, contracts, GDPR, the EU AI Act, and security certifications for a SaaS product |
+| `legal-` | 24 | Policies, contracts, GDPR, the EU AI Act, and security certifications for a SaaS product |
 
 ### Engineering
 
@@ -84,7 +84,7 @@ This collection has 58 skills in seven categories. Each skill name starts with i
 
 ### Legal
 
-All legal skills are manual-only, so call the one you need by name. They come from [lawve-ai/awesome-legal-skills](https://github.com/lawve-ai/awesome-legal-skills), and each keeps its author's license in its folder. They help you prepare documents and spot issues. They don't replace a lawyer.
+All legal skills are manual-only, so call the one you need by name. Most come from [lawve-ai/awesome-legal-skills](https://github.com/lawve-ai/awesome-legal-skills), and each keeps its author's license in its folder. The Danish and Slovak skills were written for this repo. They help you prepare documents and spot issues. They don't replace a lawyer.
 
 | Skill | Use it when |
 | --- | --- |
@@ -100,6 +100,8 @@ All legal skills are manual-only, so call the one you need by name. They come fr
 | `legal-contract-tech-review` | You need a detailed review of an MSA, SLA, EULA, or API terms. |
 | `legal-contract-nda-triage` | You received an NDA and want it rated green, yellow, or red. |
 | `legal-contract-polish-law` | The contract is under Polish law. Written in Polish. |
+| `legal-contract-danish-law` | The contract is under Danish law. Written for this repo from the official statutes, not reviewed by a Danish lawyer. |
+| `legal-contract-slovak-law` | The contract is under Slovak law. Written for this repo from the official statutes, not reviewed by a Slovak lawyer. |
 | **GDPR** | |
 | `legal-gdpr-audit` | You want your code and systems audited for GDPR issues, or have a general GDPR question. |
 | `legal-gdpr-dpia` | You're starting high-risk processing, including AI, and need a data protection impact assessment. |

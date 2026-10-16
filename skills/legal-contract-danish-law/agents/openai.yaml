@@ -1,0 +1,5 @@
+interface:
+  display_name: "Danish Contract Law"
+  short_description: "Review and draft B2B, IT, and SaaS contracts under Danish law"
+policy:
+  allow_implicit_invocation: false
