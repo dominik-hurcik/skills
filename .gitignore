@@ -1,1 +1,5 @@
 .DS_Store
+
+# Private files that legal-contract-polish-law workflows create
+practice-profile.md
+profile/

@@ -1,90 +1,90 @@
-# Legal design dla KTZR
+# Legal design at KTZR
 
-**Źródło:** standardy stosowania legal design opracowane przez naszą kancelarię, w oparciu o literaturę (Hagan, Haapio, Passera) i WorldCC Contract Design Pattern Library. Dostosowane do profilu kancelarii (B2B IT, nie consumer / nie startup).
+**Source:** legal design standards developed by the firm, based on the literature (Hagan, Haapio, Passera) and the WorldCC Contract Design Pattern Library. Adapted to the firm's profile (B2B IT, not consumer, not startups).
 
-**Cel:** ustalić, **które elementy legal design adoptujemy w KTZR**, a które są poza profilem (B2B IT, nie consumer / nie startup). Nie chodzi o "malowanie umów". Chodzi o wybrane techniki poprawiające czytelność, z zachowaniem profesjonalnego tonu dokumentu prawnego.
+**Purpose:** decide **which legal design elements KTZR adopts** and which are outside its profile. It isn't about "decorating contracts". It's about selected techniques that improve readability while keeping the professional tone of a legal document.
 
 ## TL;DR
 
-1. **Legal design ≠ ozdabianie**. To metoda projektowania dokumentów pod kątem rzeczywistego użytkownika (klienta biznesowego), a nie drugiego prawnika.
-2. **WorldCC Pattern Library** (https://contract-design.worldcc.foundation): open-source, 10 rodzin wzorców. Główne źródło operacyjne.
-3. **KTZR adoptuje 5 rodzin w pełni** (Layout, Navigation, Emphasis, Organizing, Tone of voice), **3 selektywnie** (Summarizing, Layering, Visuals, tylko gdy realnie służą), **2 odpada lub robi wewnętrznie** (Reviewing, Explainers w treści normatywnej).
-4. **Domyślna typografia KTZR:** Arial 11,5 pt dla treści głównej, lekkie obramowania pod tytułami paragrafów, justyfikacja treści. Times New Roman tylko gdy klient wprost prosi o "klasyczny" wygląd.
-5. **5 pytań do zadania przy każdej umowie** decyduje, czy warto dodać tabelę kluczowych warunków, spis treści, timeline lub explainer box.
-6. **Antywzorce zawsze odpadają:** comic contracts, kolorowe schematy w treści normatywnej, ikony zastępujące tekst, emojis.
-7. **Standard KTZR „light legal design"** = klasyczna struktura prawnicza + selektywne elementy wizualne podnoszące czytelność, bez naruszania profesjonalnego tonu.
+1. **Legal design ≠ decoration.** It's a method of designing documents for their real user (a business client), not for another lawyer.
+2. **WorldCC Pattern Library** (https://contract-design.worldcc.foundation): open source, 10 pattern families. The main operational source.
+3. **KTZR adopts 5 families fully** (Layout, Navigation, Emphasis, Organizing, Tone of voice), **3 selectively** (Summarizing, Layering, Visuals, only when they really help), and **drops or keeps 2 internal** (Reviewing, and Explainers in normative text).
+4. **Default KTZR typography:** Arial 11.5 pt for the body, light borders under paragraph titles, justified body text. Times New Roman only when the client explicitly asks for a "classic" look.
+5. **5 questions for every contract** decide whether to add a key-terms table, a table of contents, a timeline, or an explainer box.
+6. **Anti-patterns are always out:** comic contracts, coloured diagrams in normative text, icons replacing text, emoji.
+7. **The KTZR "light legal design" standard** = a classic legal structure + selected visual elements that improve readability, without breaking the professional tone.
 
-## Domyślna typografia KTZR
+## Default KTZR typography
 
-Te ustawienia stosujemy **w każdym dokumencie wychodzącym z kancelarii**, chyba że klient prosi o inny standard.
+Use these settings **in every document leaving the firm**, unless the client asks for another standard.
 
-### Czcionka
+### Font
 
-| Element | Czcionka | Rozmiar | Waga |
+| Element | Font | Size | Weight |
 |---|---|---|---|
-| Treść główna | Arial | 11,5 pt | Regular |
-| Tytuł dokumentu (POROZUMIENIE, UMOWA itd.) | Arial | 16-18 pt | Bold |
-| Podtytuł (kwalifikacja prawna) | Arial | 12 pt | Bold |
-| Tytuły paragrafów (§ X. Nazwa) | Arial | 12 pt | Bold |
-| Numeracja list literowych / numerycznych | Arial | 11,5 pt | Regular |
+| Body text | Arial | 11.5 pt | Regular |
+| Document title (POROZUMIENIE, UMOWA, and so on) | Arial | 16-18 pt | Bold |
+| Subtitle (legal classification) | Arial | 12 pt | Bold |
+| Paragraph titles (§ X. Name) | Arial | 12 pt | Bold |
+| Numbering of letter or number lists | Arial | 11.5 pt | Regular |
 
-**Wyjątek:** jeśli klient wprost prosi o "klasyczny" wygląd (Times New Roman), używamy Times New Roman 12 pt. Stosujemy tę samą strukturę i obramowania.
+**Exception:** if the client explicitly asks for a "classic" look (Times New Roman), use Times New Roman 12 pt, with the same structure and borders.
 
-### Obramowania
+### Borders
 
-| Element | Border | Kolor | Rozmiar |
+| Element | Border | Colour | Size |
 |---|---|---|---|
-| Pod tytułem paragrafu (§ X. Nazwa) | bottom | `808080` (mid gray) | 0,75-1 pt |
-| Pod tytułem dokumentu | bottom | `808080` | 1 pt |
-| Tabele („Kluczowe warunki", podsumowania) | wszystkie | `CCCCCC` (light gray) | 0,5 pt |
+| Under a paragraph title (§ X. Name) | bottom | `808080` (mid grey) | 0.75-1 pt |
+| Under the document title | bottom | `808080` | 1 pt |
+| Tables („Kluczowe warunki", summaries) | all | `CCCCCC` (light grey) | 0.5 pt |
 
-Zasada: **subtelne, monochromatyczne**. Nigdy kolory poza skalą szarości w korpusie umowy. Kolory tylko w tabelach pomocniczych (i tylko jeśli klient wprost zlecił pełniejszy legal design).
+Principle: **subtle and monochrome**. Never use colours outside greyscale in the body of a contract. Colours only in supporting tables, and only if the client explicitly ordered fuller legal design.
 
-### Układ
+### Layout
 
-- Marginesy: 2,5 cm wszystkie strony (1 cal jest też akceptowalne).
-- Justyfikacja treści: tak, dla większości akapitów. Centerowane tylko dla tytułów i nagłówków sekcji.
-- Spacing: 6 pt po każdym akapicie. Interlinia 1,25.
-- Listy: hangujące wcięcie dla (a)(b)(c), numerycznych 1./2./3..
+- Margins: 2.5 cm on all sides (1 inch is also fine).
+- Justified body text: yes, for most paragraphs. Centred only for titles and section headings.
+- Spacing: 6 pt after each paragraph. Line spacing 1.25.
+- Lists: hanging indent for (a)(b)(c) and for numbered 1./2./3. lists.
 
-## 10 rodzin wzorców WorldCC: z filtrem KTZR
+## The 10 WorldCC pattern families, filtered for KTZR
 
-Mapa wszystkich rodzin z biblioteki Passery / Haapio + decyzja KTZR co do każdej z nich.
+A map of all the families in the Passera and Haapio library, with the KTZR decision for each.
 
-| Rodzina | Co robi | Decyzja KTZR | Konkret dla nas |
+| Family | What it does | KTZR decision | What it means for us |
 |---|---|---|---|
-| **Emphasis** | Wyróżnia kluczowe informacje | ✅ adoptujemy | Bold dla kwot, dat, terminów, numerów rachunków. **Border-bottom** pod tytułami paragrafów. Kursywa dla definicji w cudzysłowach typograficznych „..." |
-| **Layout** | Układa treść by była czytelna | ✅ adoptujemy | Białe światło, krótkie akapity, hangujące wcięcia. Arial 11,5 pt, marginesy 2,5 cm |
-| **Navigation** | Pomaga znaleźć w dokumencie | ✅ adoptujemy | Spis treści dla umów >5 stron (auto-generowany). **Aktywne cross-refs** zamiast wpisywanych ręcznie |
-| **Organizing** | Strukturyzuje logicznie | ✅ adoptujemy | Kolejność klauzul wg chronologii stosunku, nie alfabetycznie. Definicje na początku, postanowienia końcowe na końcu |
-| **Tone of voice** | Słowa, ton, postrzeganie | ✅ adoptujemy | Plain Polish, aktywna strona, krótkie zdania (W1/W2 stylu KTZR) |
-| **Summarizing** | Streszcza | ⚖️ selektywnie | Tabela „Kluczowe warunki" na początku. Tylko dla umów >3 stron lub gdy klient biznesowy ją czyta |
-| **Layering** | Hierarchizuje, kluczowe na wierzchu | ⚖️ selektywnie | Klauzule techniczne / operacyjne przenosimy do załączników; korpus zostaje czytelny |
-| **Visuals** | Obrazy wspomagające zrozumienie | ⚖️ selektywnie | Timeline dla projektów z fazami (wdrożenie IT, milestones). Tabela RACI dla podziału odpowiedzialności. Swimlane dla procesów multi-strony. **Tylko gdy realnie tłumaczą strukturę** |
-| **Explainers** | Wyjaśnia znaczenie klauzul | ⚠️ z ostrożnością | Boxy „Wyjaśnienie" tylko dla wyjątkowo nieintuicyjnych klauzul (cap odpowiedzialności, wina umyślna, indemnifikacja), gdy klient sygnalizuje że nie rozumie |
-| **Reviewing** | Sprawdza kompletność | 🏠 wewnętrznie | Checklisty dla naszego zespołu (`workflows/`), nie wprowadzamy do dokumentu wychodzącego |
+| **Emphasis** | Highlights key information | ✅ adopt | Bold for amounts, dates, deadlines, and account numbers. **A bottom border** under paragraph titles. Italics for definitions in typographic quotes „..." |
+| **Layout** | Arranges content for readability | ✅ adopt | White space, short paragraphs, hanging indents. Arial 11.5 pt, 2.5 cm margins |
+| **Navigation** | Helps people find things | ✅ adopt | A table of contents for contracts over 5 pages (auto-generated). **Live cross-references** instead of typed ones |
+| **Organizing** | Structures content logically | ✅ adopt | Clauses in the chronological order of the relationship, not alphabetically. Definitions first, final provisions last |
+| **Tone of voice** | Words, tone, perception | ✅ adopt | Plain Polish, active voice, short sentences (W1/W2 of the KTZR style) |
+| **Summarizing** | Summarises | ⚖️ selectively | A „Kluczowe warunki" (key terms) table at the start. Only for contracts over 3 pages, or when a business client reads it |
+| **Layering** | Puts what matters on top | ⚖️ selectively | Move technical and operational clauses to annexes so the body stays readable |
+| **Visuals** | Images that aid understanding | ⚖️ selectively | A timeline for phased projects (IT implementation, milestones). A RACI table for division of responsibility. A swimlane for multi-party processes. **Only when they really explain the structure** |
+| **Explainers** | Explains what clauses mean | ⚠️ with care | „Wyjaśnienie" (explanation) boxes only for unusually counter-intuitive clauses (liability cap, intentional fault, indemnity), when the client signals they don't understand |
+| **Reviewing** | Checks completeness | 🏠 internal | Checklists for our team (`workflows/`). We don't put them in outgoing documents |
 
-## 5 pytań do zadania przy każdej umowie
+## 5 questions for every contract
 
-Przed wysłaniem umowy do klienta / kontrahenta:
+Before sending a contract to the client or counterparty:
 
-1. **Czy umowa ma >3 strony?** Tak → dodaj spis treści (Word: `Wstaw → Spis treści`).
-2. **Czy umowa zawiera kluczowe parametry, które klient biznesowy chciałby widzieć od razu?** Tak → tabela „Kluczowe warunki" na początku (Strony, Przedmiot, Wynagrodzenie, Czas trwania, Najważniejsze zobowiązania).
-3. **Czy umowa opisuje proces wieloetapowy?** Tak → rozważ timeline (faza 1 → 2 → 3) lub swimlane (kto, kiedy, co robi).
-4. **Czy umowa zawiera klauzule technicznie złożone, których odbiorca prawdopodobnie nie zrozumie?** Tak → krótki explainer box obok (max 2-3 zdania plain Polish).
-5. **Czy cross-referencje są aktywne (klikalne) w Wordzie?** Nie → popraw na hiperłącza, bo statyczny tekst „§ 5 ust. 2" przy późniejszej renumeracji staje się błędem.
+1. **Is the contract over 3 pages?** Yes → add a table of contents (Word: `Insert → Table of Contents`).
+2. **Does it contain key parameters a business client would want to see at once?** Yes → a „Kluczowe warunki" table at the start (parties, subject, remuneration, term, main obligations).
+3. **Does it describe a multi-stage process?** Yes → consider a timeline (phase 1 → 2 → 3) or a swimlane (who does what, when).
+4. **Does it contain technically complex clauses the reader probably won't understand?** Yes → a short explainer box next to them (at most 2 to 3 sentences in plain Polish).
+5. **Are the cross-references live (clickable) in Word?** No → change them to hyperlinks, because static text like „§ 5 ust. 2" becomes an error after renumbering.
 
-Jeśli odpowiedź na pyt. 1-4 to „nie", umowa zostaje w **stylu klasycznym KTZR** (Arial 11,5, border-bottom pod §, bez dodatkowych elementów wizualnych).
+If the answer to questions 1 to 4 is "no", the contract stays in the **classic KTZR style** (Arial 11.5, a bottom border under each §, no extra visual elements).
 
-## Konkretne techniki krok po kroku
+## Specific techniques, step by step
 
-### A. Tabela „Kluczowe warunki" (Summarizing)
+### A. „Kluczowe warunki" table (Summarizing)
 
-**Kiedy:** umowy >3 stron, każda ugoda, umowy wdrożeniowe IT, umowy ramowe z wieloma zamówieniami.
+**When:** contracts over 3 pages, every settlement, IT implementation contracts, framework agreements with many orders.
 
-**Lokalizacja:** zaraz pod tytułem dokumentu, przed komparycją lub pod nią: zależy od konwencji.
+**Where:** right under the document title, before or after the parties' details, depending on convention.
 
-**Struktura (minimalna, 2-kolumnowa):**
+**Structure (minimal, 2 columns):**
 
 ```
 | Strony                  | Wykonawca: [Nazwa] / Zamawiający: [Nazwa]   |
@@ -95,34 +95,34 @@ Jeśli odpowiedź na pyt. 1-4 to „nie", umowa zostaje w **stylu klasycznym KTZ
 | Sąd właściwy            | [Miejscowość]                               |
 ```
 
-**Charakter:** informacyjny, nie normatywny. Wiążąca jest treść paragrafów. Jeśli ktoś o to pyta. Możemy dopisać klauzulę „Tabela ma charakter wyłącznie informacyjny" w postanowieniach końcowych, ale domyślnie nie wpisujemy (zbędne, oczywiste).
+**Nature:** informative, not normative. The paragraphs are what bind. If someone asks, we can add the clause „Tabela ma charakter wyłącznie informacyjny" (the table is for information only) to the final provisions, but we don't by default, because it's unnecessary and obvious.
 
-### B. Spis treści (Navigation)
+### B. Table of contents (Navigation)
 
-**Kiedy:** umowy >5 stron.
+**When:** contracts over 5 pages.
 
-**Jak:** Word → `Wstaw → Spis treści` → wybierz wzorzec automatyczny, dostosuj font do Arial 11,5. Wymaga, by tytuły paragrafów były oznaczone jako *Heading 2* (lub odpowiedni styl).
+**How:** Word → `Insert → Table of Contents` → pick an automatic template and set the font to Arial 11.5. The paragraph titles must use *Heading 2* (or a matching style).
 
-### C. Timeline procesu (Visuals)
+### C. Process timeline (Visuals)
 
-**Kiedy:** umowy opisujące projekt wielofazowy (wdrożenie IT, projekt budowlany, migracja). Dla ugody z 3 ratami. *Nie warto*, tabela rat wystarcza.
+**When:** contracts for multi-phase projects (IT implementation, construction, migration). For a settlement with 3 instalments it *isn't worth it*: a table of instalments is enough.
 
-**Jak:**
-- Word: `Wstaw → SmartArt → Proces` → wzór poziomy z 3-7 etapami.
-- Każdy etap = krótka nazwa (1-3 słowa) + data / milestone.
-- Bez ikon, monochromatycznie (szarości lub jeden kolor accentowy nawiązujący do brandingu klienta).
+**How:**
+- Word: `Insert → SmartArt → Process` → a horizontal template with 3 to 7 stages.
+- Each stage = a short name (1 to 3 words) + a date or milestone.
+- No icons, monochrome (greys, or one accent colour matching the client's branding).
 
 ### D. Swimlane (Visuals)
 
-**Kiedy:** wieloetapowe procesy z udziałem >2 podmiotów (np. body leasing IT, Zamawiający / Usługodawca / Specjalista).
+**When:** multi-stage processes involving more than 2 parties (for example IT body leasing: Zamawiający / Usługodawca / Specjalista).
 
-**Jak:** SmartArt → diagram z wierszami reprezentującymi strony, kolumnami reprezentującymi fazy. Strzałki przepływu między wierszami.
+**How:** SmartArt → a diagram with rows for the parties and columns for the phases, with flow arrows between rows.
 
 ### E. Explainer box (Explainers)
 
-**Kiedy:** rzadko, tylko gdy klauzula technicznie złożona i klient wprost sygnalizuje że nie rozumie.
+**When:** rarely, only when a clause is technically complex and the client explicitly signals they don't understand it.
 
-**Struktura:**
+**Structure:**
 ```
 ┌─────────────────────────────────────────────┐
 │ Wyjaśnienie (charakter informacyjny):       │
@@ -131,18 +131,18 @@ Jeśli odpowiedź na pyt. 1-4 to „nie", umowa zostaje w **stylu klasycznym KTZ
 └─────────────────────────────────────────────┘
 ```
 
-**Charakter:** informacyjny, nie normatywny. Box ma być wizualnie oddzielony od klauzuli (np. tabela 1×1 z lekkim border'em, fontem 10,5 pt italic).
+**Nature:** informative, not normative. Keep the box visually separate from the clause (for example a 1×1 table with a light border, in 10.5 pt italics).
 
-### F. Border-bottom pod tytułami paragrafów (Emphasis + Layout)
+### F. Bottom border under paragraph titles (Emphasis + Layout)
 
-**Cel:** subtelne oddzielenie tytułu od treści, ułatwia skanowanie dokumentu.
+**Purpose:** a subtle separation of title and body that makes the document easier to scan.
 
-**Implementacja (Word):**
-- Zaznaczamy paragraf z tytułem (§ X. Nazwa).
-- `Akapit → Obramowanie → Dolne obramowanie` → kolor `808080`, grubość 0,75 pt.
-- Alternatywnie w style definition: `pBdr → bottom`.
+**Implementation (Word):**
+- Select the paragraph with the title (§ X. Name).
+- `Paragraph → Borders → Bottom Border` → colour `808080`, width 0.75 pt.
+- Alternatively, in the style definition: `pBdr → bottom`.
 
-**Implementacja (docx-js):**
+**Implementation (docx-js):**
 ```javascript
 new Paragraph({
   border: { bottom: { style: BorderStyle.SINGLE, size: 6, color: "808080", space: 4 } },
@@ -150,47 +150,47 @@ new Paragraph({
 })
 ```
 
-## Antywzorce: czego unikamy
+## Anti-patterns: what we avoid
 
-- **Comic contracts** (ilustracje komiksowe zastępujące treść). Stanford robił z RPA dla pracowników niepiśmiennych: nie nasz profil.
-- **Kolorowe schematy w treści normatywnej**. Wygląda jak prezentacja, nie dokument prawny.
-- **Ikony zamiast tekstu w klauzulach**. Ikona może być akcentem w tabeli kluczowych warunków (jeśli klient wymaga); nigdy nie zastępuje treści normatywnej.
-- **Emojis:** w żadnym dokumencie wychodzącym z kancelarii.
-- **Zbyt dużo bold'a:** jeśli wszystko jest podkreślone, nic nie jest podkreślone. Bold rezerwujemy dla kwot, dat, kluczowych zobowiązań.
-- **Dwa różne fonty w jednym dokumencie** (poza wyjątkami typu Arial dla treści + Courier dla kodu w załączniku technicznym). Trzymamy się jednego.
-- **Granice komórek tabeli ciemniejsze niż treść:** wygląda jak kratka zeszytu. Zawsze jasny gray (`CCCCCC` lub jaśniejsze).
+- **Comic contracts** (cartoon illustrations replacing the text). Used in South Africa for workers who can't read. Not our profile.
+- **Coloured diagrams in normative text.** It looks like a presentation, not a legal document.
+- **Icons instead of text in clauses.** An icon can be an accent in a key-terms table (if the client requires it), but it never replaces normative text.
+- **Emoji:** in no document leaving the firm.
+- **Too much bold:** if everything is emphasised, nothing is. Keep bold for amounts, dates, and key obligations.
+- **Two different fonts in one document** (except cases like Arial for the body and Courier for code in a technical annex). Stick to one.
+- **Table borders darker than the text:** it looks like graph paper. Always light grey (`CCCCCC` or lighter).
 
-## Decyzja użycia: kiedy idziemy „light legal design"
+## When to use "light legal design"
 
-KTZR domyślnie pracuje w trybie **„classic-clean":** bez tabeli kluczowych warunków, bez timeline'ów, ale z naszą domyślną typografią (Arial 11,5 + border-bottom + plain Polish).
+By default KTZR works in **"classic-clean"** mode: no key-terms table and no timelines, but with our default typography (Arial 11.5 + bottom border + plain Polish).
 
-Tryb **„light legal design"** uruchamiamy gdy spełniony jest **co najmniej jeden** z warunków:
+Switch to **"light legal design"** when **at least one** of these is true:
 
-- Umowa >5 stron i adresatem jest osoba biznesowa (nie prawnik drugiej strony).
-- Umowa opisuje proces wieloetapowy z milestone'ami.
-- Klient wprost prosi o legal design / „user-friendly" dokument.
-- Umowa będzie używana operacyjnie przez zespoły (nie tylko podpisana i schowana do segregatora).
+- The contract is over 5 pages and the reader is a business person (not the other side's lawyer).
+- The contract describes a multi-stage process with milestones.
+- The client explicitly asks for legal design or a "user-friendly" document.
+- Teams will use the contract operationally (it won't just be signed and filed).
 
-Tryb **„full legal design"** (kolory, ikony, infografiki): **nie robimy w KTZR**. Jeśli klient tego potrzebuje, kierujemy do wyspecjalizowanych kancelarii projektowych.
+**"Full legal design"** (colours, icons, infographics): **we don't do it at KTZR**. If the client needs it, we refer them to specialised design-focused firms.
 
-## Źródła doktrynalne i operacyjne
+## Doctrinal and operational sources
 
-### Operacyjne (biblioteki wzorców)
+### Operational (pattern libraries)
 
-- **WorldCC Contract Design Pattern Library:** https://contract-design.worldcc.foundation (Stefania Passera, Helena Haapio). Open-source, 10 rodzin wzorców z przykładami od Shell, Airbus, Juro i in.
-- **Open Law Lab:** https://www.openlawlab.com (Margaret Hagan). Blog + zasoby.
+- **WorldCC Contract Design Pattern Library:** https://contract-design.worldcc.foundation (Stefania Passera, Helena Haapio). Open source, 10 pattern families with examples from Shell, Airbus, Juro, and others.
+- **Open Law Lab:** https://www.openlawlab.com (Margaret Hagan). Blog and resources.
 - **Stanford Legal Design Lab:** https://www.legaltechdesign.com.
 
-### Doktrynalne (publikacje)
+### Doctrinal (publications)
 
 - **Hagan, M.** (2020), "Legal Design as a Thing: A Theory of Change and a Set of Methods to Craft a Human-Centered Legal System", *Design Issues* 36(3).
 - **Hagan, M.**, *Law by Design*: https://www.lawbydesign.co (online, open).
-- **Haapio, H. & Passera, S.** (2021), "Contracts as interfaces: Exploring visual representation patterns in contract design", w: *Legal Informatics*, Cambridge University Press, s. 213-238.
+- **Haapio, H. & Passera, S.** (2021), "Contracts as interfaces: Exploring visual representation patterns in contract design", in: *Legal Informatics*, Cambridge University Press, pp. 213-238.
 - **Haapio, H. & Hagan, M.** (2016), "Design Patterns for Contracts", *Proceedings of the 19th International Legal Informatics Symposium IRIS 2016*. SSRN: 2747280.
-- **Corrales Compagnucci, M., Haapio, H., Hagan, M. & Doherty, M.** (red.) (2021), *Legal Design*, Edward Elgar Publishing.
+- **Corrales Compagnucci, M., Haapio, H., Hagan, M. & Doherty, M.** (eds.) (2021), *Legal Design*, Edward Elgar Publishing.
 
-## Powiązania w skill
+## Links within the skill
 
-- `style-redakcyjny.md`: W1-W7 (warsztat prawnika + styl KTZR). Domyślna typografia KTZR (Arial 11,5 + bordery) jest tu rozszerzeniem warstwy 2.
-- `zlote-reguly.md`: Złote Reguły KTZR (#1, #12). Legal design nie zmienia tych reguł.
-- `baza-klauzul/`: wzorce klauzul. Visual layer jest *niezależny* od treści klauzul. To jest jak je *prezentujemy*, nie *co* w nich piszemy.
+- `drafting-style.md`: W1 to W8 (lawyer's craft) and the KTZR style. The default KTZR typography (Arial 11.5 + borders) extends layer 2.
+- `golden-rules.md`: the KTZR golden rules (1 and 12). Legal design doesn't change these rules.
+- `clause-bank/`: clause patterns. The visual layer is *independent* of clause content. It's how we *present* clauses, not *what* we write in them.

@@ -1,41 +1,40 @@
-# Format Checklist KTZR
+# KTZR format checklist
 
-10 punktów do sprawdzenia przed wygenerowaniem lub zwróceniem każdego dokumentu.
-Szybki filtr: czytelnia dla `legal-design.md` i `style-redakcyjny.md`.
+Ten points to check before generating or returning any document. A quick filter for `legal-design.md` and `drafting-style.md`. The points apply to the Polish contract text.
 
 ---
 
 ## Checklist
 
-| # | Reguła | Test |
+| # | Rule | Test |
 |---|--------|------|
-| 1 | **Cudzysłowy** | Wyłącznie „polskie". Nie "angielskie" ani «żadne inne» |
-| 2 | **Pauza** | Długa pauza: (U+2014) przy wtrąceniach i wyliczeniach, nie półpauza - ani myślnik - |
-| 3 | **Kwoty i kary** | Cyframi i słownie: `18.000,00 zł (słownie: osiemnaście tysięcy złotych)` |
-| 4 | **Numeracja** | §/ust./pkt spójne przez cały dokument; listy klauzul: a) b) c); listy punktów: 1) 2) 3) |
-| 5 | **Definicje** | Każde pojęcie pisane Wielką Literą ma definicję w § Definicje lub przy pierwszym wystąpieniu |
-| 6 | **Odesłania wewnętrzne** | Każde „§ X ust. Y" prowadzi do istniejącego przepisu. Sprawdź po skończeniu numeracji |
-| 7 | **Brak łaciny w klauzulach** | `lucrum cessans`, `dolus`, `ex contractu`. Tylko w analizie, nigdy w treści klauzul |
-| 8 | **Terminy** | Daty: `dd.mm.rrrr`; okresy: `7 dni` / `7 Dni Roboczych`: nie „tydzień", „niezwłocznie" |
-| 9 | **Spójność stron** | Jedna nazwa przez cały dokument: „Wykonawca" wszędzie, nie raz „Zleceniobiorca" |
-| 10 | **Cytaty przepisów** | Każdy art. N ustawy X → najpierw `verify_article()` (jeśli MCP aktywny) lub `[NIEZWERYFIKOWANE]` |
+| 1 | **Quotation marks** | Polish „…" only. Not English "…" or «any others». |
+| 2 | **No dashes** | No em or en dashes in contract text. Definitions use „oznacza". Asides use commas. A hyphen only in numeric ranges such as „5-10 dni". |
+| 3 | **Amounts and penalties** | In figures and in words: `18.000,00 zł (słownie: osiemnaście tysięcy złotych)` |
+| 4 | **Numbering** | §/ust./pkt consistent across the whole document. Clause lists: a) b) c). Point lists: 1) 2) 3). |
+| 5 | **Definitions** | Every capitalised term is defined in § Definicje or at first use. |
+| 6 | **Internal cross-references** | Every „§ X ust. Y" leads to an existing provision. Check after numbering is final. |
+| 7 | **No Latin in clauses** | `lucrum cessans`, `dolus`, `ex contractu`: only in analysis, never in clause text. |
+| 8 | **Deadlines** | Dates as `dd.mm.rrrr`. Periods as `7 dni` / `7 Dni Roboczych`, not „tydzień" (a week) or „niezwłocznie". |
+| 9 | **Consistent party names** | One name throughout: „Wykonawca" everywhere, not „Zleceniobiorca" in places. |
+| 10 | **Quoted provisions** | Every article N of act X: first `verify_article()` (if the MCP server is active), otherwise `[UNVERIFIED]`. |
 
 ---
 
-## Kiedy uruchamiać
+## When to run it
 
-- Przed każdym outputem z `generator-umow.md` (KROK 5 QA)
-- Przed każdym outputem z `generator-regulaminu.md`
-- Po `popraw-fragment.md`: przed zwróceniem poprawionego fragmentu
-- Opcjonalnie: po `audyt-ryzyk.md`. Sprawdź cytowane przepisy (punkt 10)
+- Before every output from `contract-generator.md` (STEP 5, QA)
+- Before every output from `terms-generator.md`
+- After `fix-clause.md`, before returning the corrected passage
+- Optionally after `risk-audit.md`, to check the cited provisions (point 10)
 
-## Czerwone flagi: natychmiast popraw przed outputem
+## Red flags: fix at once before output
 
 ```
-❌ "niezwłocznie"                     → zastąp: "w terminie 3 dni roboczych" (lub inny)
-❌ cudzysłów "..."                    → zastąp: „..."
-❌ półpauza - lub myślnik -            → zastąp:
-❌ Wielka Litera bez definicji         → dodaj definicję lub zmień na małą
-❌ § 5 ust. 3 (nieistniejący)         → popraw odesłanie
-❌ art. X ustawy Y bez verify_article → dodaj [NIEZWERYFIKOWANE] lub wywołaj MCP
+❌ "niezwłocznie"                       → replace: "w terminie 3 dni roboczych" (or another number)
+❌ straight quotes "..."                → replace: „..."
+❌ em dash or en dash                   → replace: „oznacza" in definitions, a comma elsewhere
+❌ capitalised term without definition  → add a definition, or lower-case it
+❌ § 5 ust. 3 (doesn't exist)           → fix the cross-reference
+❌ art. X of act Y without verify_article → add [UNVERIFIED] or call the MCP server
 ```

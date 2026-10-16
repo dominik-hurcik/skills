@@ -1,25 +1,25 @@
-# Materiały testowe
+# Test materials
 
-Fikcyjne dokumenty do testowania skilla bez angażowania danych klientów.
+Fictional documents for testing the skill without using client data. The test contracts are in Polish.
 
-## Testowe akta (`testowe-akta/`)
+## Test contracts (`test-contracts/`)
 
-| Plik | Typ umowy | Kluczowe ryzyka do wykrycia |
+| File | Contract type | Key risks to detect |
 |------|-----------|----------------------------|
-| `01-nda-b2b.md` | NDA wzajemne | Brak kary umownej, „niezwłocznie", wąska definicja inf. poufnych, brak poufności po zakończeniu |
-| `02-body-leasing-it.md` | Body leasing IT | Ryzyko stosunku pracy, brak pól eksploatacji (PrAut), wyłączenie lucrum cessans bez zastrzeżenia winy umyślnej (art. 473 §2 KC), brak non-solicitation |
-| `03-saas-z-dpa.md` | SaaS + DPA/RODO | Brak twardego SLA, auto-renewal bez okna wypowiedzenia, niekompletna UPD (brak audytu, naruszenia, podpodmiotów wg art. 28 ust. 3 RODO) |
+| `01-nda-b2b.md` | Mutual NDA | No contractual penalty, „niezwłocznie", a narrow definition of confidential information, no confidentiality after the end |
+| `02-body-leasing-it.md` | IT body leasing | Risk of an employment relationship, no fields of exploitation (PrAut), exclusion of lost profits without the intentional-fault reservation (art. 473 § 2 KC), no non-solicitation |
+| `03-saas-z-dpa.md` | SaaS + DPA (GDPR) | No firm SLA, auto-renewal with no notice window, an incomplete data processing agreement (no audit, breach, or sub-processor terms under art. 28 ust. 3 RODO) |
 
-## Jak używać
+## How to use them
 
-1. Wklej zawartość pliku (bez bloku ostrzeżenia) do sesji z Claude ze skillem.
-2. Poproś o: triage, pełną analizę, audyt ryzyk lub konkretny workflow.
-3. Porównaj wynik z listą ryzyk w stopce pliku: to twój benchmark.
+1. Paste a file's content (without the warning block) into a session with this skill.
+2. Ask for triage, a full review, a risk audit, or a specific workflow.
+3. Compare the result with the list of risks in the file's footer. That's your benchmark.
 
-Dokumenty celowo zawierają luki typowe dla umów „z internetu" lub pierwszych szkiców bez nadzoru prawnego. Skill powinien je wychwycić.
+The documents deliberately contain gaps typical of contracts "from the internet", or first drafts without legal supervision. The skill should catch them.
 
-## Zasady
+## Rules
 
-- Wszystkie dane (nazwy, KRS, NIP, osoby) są **zmyślone:** nie używaj ich w prawdziwych dokumentach.
-- Numery KRS zaczynają się od `0000999`: poza zakresem prawdziwych wpisów.
-- Plik możesz edytować aby testować skill na konkretnych konfiguracjach klauzul.
+- All data (names, KRS, NIP, people) is **made up**. Don't use it in real documents.
+- KRS numbers start with `0000999`, outside the range of real entries.
+- You can edit the files to test the skill on specific clause configurations.
