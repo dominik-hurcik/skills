@@ -102,7 +102,9 @@ For a project install, run `.agent-instructions/install.py` from inside the proj
 
 ### Remove
 
-Run the installer and pick "Remove an install". It removes the skill links, its own instruction files, the part it added to your `AGENTS.md` or `CLAUDE.md`, and its block in `.gitignore`. If you picked replace, it puts your old files back. Your own text stays. It keeps the downloaded collection, so you can delete that folder yourself.
+Run the installer and pick "Remove an install". It removes the skill links, its own instruction files, the part it added to your `AGENTS.md` or `CLAUDE.md`, and its block in `.gitignore`. If you picked replace, it puts your old files back. Your own text stays.
+
+In project mode, it also offers to delete the project's copy of the collection. It keeps that copy if you changed files in it or made commits that aren't on GitHub. In user mode, it keeps the collection, because other projects may still use it. Delete that folder yourself if you don't need it.
 
 ### Run it without questions
 

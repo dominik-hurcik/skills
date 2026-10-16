@@ -461,8 +461,42 @@ def remove_install(target: Target) -> list:
         else:
             gitignore.unlink()
             done.append(f"Removed {gitignore}, which only held the agent skills block.")
-    done.append(f"The collection itself is still in {target.source}. Delete that folder if you don't need it.")
     return done
+
+
+def unsaved_work(source: Path) -> str:
+    """Say why deleting the collection would lose work, or return an empty string."""
+    if not (source / ".git").exists():
+        return ""
+    if git("-C", str(source), "status", "--porcelain", check=False).stdout.strip():
+        return "it has changes you haven't committed"
+    if git("-C", str(source), "log", "--branches", "--not", "--remotes", "--oneline", check=False).stdout.strip():
+        return "it has commits that aren't on GitHub"
+    return ""
+
+
+def delete_tree(path: Path) -> None:
+    def make_writable(func, failed, _):
+        # Git marks its object files read-only, and Windows won't delete those.
+        os.chmod(failed, stat.S_IWRITE)
+        func(failed)
+
+    shutil.rmtree(path, onerror=make_writable)
+
+
+def remove_collection(target: Target, ask: Asker) -> str:
+    """In project mode, delete the project's own copy of the collection. User mode keeps its copy."""
+    source = target.source
+    keep = f"The collection itself is still in {source}. Delete that folder if you don't need it."
+    if target.mode != "project" or target.root not in source.parents:
+        return keep
+    reason = unsaved_work(source)
+    if reason:
+        return f"Kept {source}, because {reason}. Delete that folder yourself once you've saved your work."
+    if not ask.yes_no(f"Delete this project's copy of the collection too?\n  {source}", True):
+        return keep
+    delete_tree(source)
+    return f"Deleted {source}."
 
 
 # ---------- Flow ----------
@@ -593,6 +627,7 @@ def run(args) -> None:
         print()
         for line in remove_install(target):
             print(line)
+        print(remove_collection(target, ask))
         return
 
     source = locate_source(mode, root)
