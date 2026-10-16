@@ -32,9 +32,9 @@ Use the bundled local source files for framework review. Prefer the `working/` M
 | Framework or Law | Working Markdown | Official Source |
 |---|---|---|
 | EU AI Act | `references/working/EU AI ACT.md` | `references/official/EU AI ACT.pdf` |
-| EU GPAI Code of Practice - Copyright Chapter | `references/working/EU GPAI Code_of_Practice_for_GeneralPurpose_AI_Models_Copyright_Chapter.md` | `references/official/EU GPAI Code_of_Practice_for_GeneralPurpose_AI_Models_Copyright_Chapter.pdf` |
-| EU GPAI Code of Practice - Safety and Security Chapter | `references/working/EU GPAI Code_of_Practice_for_GeneralPurpose_AI_Models_Safety_and_Security_Chapter.md` | `references/official/EU GPAI Code_of_Practice_for_GeneralPurpose_AI_Models_Safety_and_Security_Chapter.pdf` |
-| EU GPAI Code of Practice - Transparency Chapter | `references/working/EU GPAI Code_of_Practice_for_GeneralPurpose_AI_Models_Transparency_Chapter.md` | `references/official/EU GPAI Code_of_Practice_for_GeneralPurpose_AI_Models_Transparency_Chapter.pdf` |
+| EU GPAI Code of Practice - Copyright Chapter | `references/working/EU-GPAI-Code-Copyright.md` | `references/official/EU-GPAI-Code-Copyright.pdf` |
+| EU GPAI Code of Practice - Safety and Security Chapter | `references/working/EU-GPAI-Code-Safety-Security.md` | `references/official/EU-GPAI-Code-Safety-Security.pdf` |
+| EU GPAI Code of Practice - Transparency Chapter | `references/working/EU-GPAI-Code-Transparency.md` | `references/official/EU-GPAI-Code-Transparency.pdf` |
 | GDPR | `references/working/GDPR.md` | `references/official/GDPR.pdf` |
 | NIST AI RMF 1.0 | `references/working/NIST AI RMF 100-1.md` | `references/official/NIST AI RMF 100-1.pdf` |
 | OECD AI Principles | `references/working/OECD-LEGAL-0449-en.md` | `references/official/OECD-LEGAL-0449-en.pdf` |
