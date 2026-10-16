@@ -1,0 +1,5 @@
+interface:
+  display_name: "Last 30 Days"
+  short_description: "Research what people said about a topic in the last 30 days"
+policy:
+  allow_implicit_invocation: false
