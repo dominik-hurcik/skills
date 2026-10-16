@@ -32,7 +32,7 @@ This collection has 60 skills in seven categories. Each skill name starts with i
 
 | Skill | Runs | What it does |
 | --- | --- | --- |
-| `planning-brainstorming` | Automatic | Asks what you want and why before any creative work, then writes a design you approve before anything gets built. |
+| `planning-brainstorming` | Manual | Asks what you want and why before you build something, then writes a design you approve before anything gets built. |
 | `planning-grilling` | Automatic | Stress-tests a plan, decision, or idea one round of questions at a time. |
 | `planning-sharpen` | Manual | Sharpens a task before starting: the expert approach, the real goal, and the right level of detail. |
 
@@ -118,9 +118,43 @@ All legal skills are manual-only, so call the one you need by name. Most come fr
 | `legal-security-eu-cra` | You need to check whether the EU Cyber Resilience Act covers your product. |
 | `legal-vendor-due-diligence` | You're vetting your own suppliers or technology vendors. |
 
-## Install in a project
+## Install
 
-Requires Git and Python 3.9 or newer. This setup uses symbolic links on macOS and Linux.
+You need Git and Python 3.9 or newer. The installer works on macOS, Linux, and Windows. On macOS and Linux, run it with `python3`. On Windows, use `py` or `python`.
+
+There are two modes:
+
+| Mode | Where the skills go | Use it when |
+| --- | --- | --- |
+| User mode (recommended) | Your home folder, for every project on this machine | You want the skills everywhere and update them with one `git pull`. |
+| Project mode | One project | You want the skills checked in with a project, or only in that project. |
+
+### User mode
+
+Clone the collection once, anywhere in your home folder, and run the installer with `--user`:
+
+```sh
+git clone https://github.com/dominik-hurcik/skills.git ~/agent-skills
+python3 ~/agent-skills/install.py --user
+```
+
+On Windows:
+
+```powershell
+git clone https://github.com/dominik-hurcik/skills.git $HOME\agent-skills
+py $HOME\agent-skills\install.py --user
+```
+
+The installer adds:
+
+| Path | What it loads |
+| --- | --- |
+| `~/.agents/skills/<name>` | Skills for Codex |
+| `~/.claude/skills/<name>` | The same skills for Claude Code |
+| `~/.codex/AGENTS.md` | Shared instructions for Codex. If you set `CODEX_HOME`, it goes there. |
+| `~/.claude/CLAUDE.md` | A one-line file that imports the shared instructions for Claude Code |
+
+### Project mode
 
 Open a terminal in your project's root folder and run:
 
@@ -129,42 +163,36 @@ git clone https://github.com/dominik-hurcik/skills.git .agent-instructions
 python3 .agent-instructions/install.py
 ```
 
-The installer creates these links in your project:
-
-| Project path | What it loads |
-| --- | --- |
-| `AGENTS.md` | Shared instructions for Codex |
-| `CLAUDE.md` | Imports the shared instructions for Claude Code |
-| `.agents/skills/<name>` | Skills available to Codex |
-| `.claude/skills/<name>` | The same skills available to Claude Code |
-
-Start a new agent session in the project after installation. Keep `.agent-instructions` inside the project, since the links point into it.
-
-If any destination contains an existing file or a different link, the installer stops before changing anything. To keep your repo's existing instructions, use `--skills-only`.
+The installer adds the same four items inside the project: `.agents/skills/<name>`, `.claude/skills/<name>`, `AGENTS.md`, and `CLAUDE.md`. Keep `.agent-instructions` inside the project, because the links point into it.
 
 For a personal install, add `.agent-instructions/` to the project's `.gitignore` so Git skips the nested clone. Each new checkout needs its own installation.
 
-## Install only skills
+### Keep your own instructions
 
-Use this mode when your repo already has custom `AGENTS.md` or `CLAUDE.md` instructions that you want to keep.
+If you already have an `AGENTS.md` or `CLAUDE.md` where the installer would put one, it stops before changing anything. To keep yours and install only the skills, add `--skills-only`. Use it each time you rerun the installer for that location.
 
-For a first installation, run these commands from your project's root:
+The installer also stops if a skill folder with the same name already exists and isn't one of its links.
 
-```sh
-git clone https://github.com/dominik-hurcik/skills.git .agent-instructions
-python3 .agent-instructions/install.py --skills-only
-```
+### Update
 
-If `.agent-instructions` already exists, update it and run:
+Pull the collection, then rerun the installer with the same options:
 
 ```sh
-git -C .agent-instructions pull --ff-only
-python3 .agent-instructions/install.py --skills-only
+git -C ~/agent-skills pull --ff-only
+python3 ~/agent-skills/install.py --user
 ```
 
-This mode adds links under `.agents/skills` and `.claude/skills`. It leaves `AGENTS.md` and `CLAUDE.md` untouched and does not create them if they are missing. Existing skills with conflicting names still stop installation before any changes.
+For project mode, run `git -C .agent-instructions pull --ff-only` and `python3 .agent-instructions/install.py` from the project root.
 
-Use `--skills-only` each time you rerun the installer for this project. Start a new agent session after installation to pick up the skills.
+Changes to existing skills take effect right after the pull, because the skill folders are links. Rerun the installer when skills are added or removed. It links new skills and removes links to deleted ones. Start a new agent session afterwards.
+
+### How the installer links files
+
+- **Skill folders.** Symlinks on macOS and Linux. Directory junctions on Windows, which need no admin rights or Developer Mode.
+- **`CLAUDE.md`.** A small file with an `@` import of `AGENTS.md`, so Claude Code always reads the current shared instructions.
+- **`AGENTS.md`.** A symlink on macOS and Linux. Windows allows file symlinks only with Developer Mode turned on. Without it, the installer writes a copy and refreshes it each time you rerun the installer.
+
+The installer marks the files it writes with a comment on the first line. On a rerun it updates only its own files and links, never yours.
 
 ## Use a skill
 
@@ -200,16 +228,7 @@ Installing a skill makes it available. It does not make every skill run on every
 4. Write instructions that work in both agents. To use another skill, write "load the `other-skill` skill". Don't name agent-specific tools such as Claude Code's Skill tool, and don't use `/name` or `$name` syntax inside a skill.
 5. Set when the skill runs. See [Choose when a skill runs](#choose-when-a-skill-runs).
 6. Commit the new skill to this repository.
-7. In each installed project, pull the update and rerun the installer:
-
-   ```sh
-   git -C .agent-instructions pull --ff-only
-   python3 .agent-instructions/install.py
-   ```
-
-   For a skills-only installation, add `--skills-only` to the installer command each time.
-
-The installer adds links for new skills, keeps existing links, and removes links to skills deleted from this collection. Changes to an existing skill take effect as soon as its files are updated in the project's clone. Start a new agent session if it still uses the old instructions.
+7. Pull the update wherever you installed the collection and rerun the installer. See [Update](#update).
 
 ## Choose when a skill runs
 
@@ -225,9 +244,9 @@ For behavior you want on every response, add a rule to `AGENTS.md` and allow the
 
 ## Edit shared instructions
 
-Edit `AGENTS.md`. `CLAUDE.md` contains `@AGENTS.md`, so Claude Code imports the same instructions.
+Edit `AGENTS.md`. Claude Code imports the same file through `CLAUDE.md`.
 
-Commit changes in the source repository, then pull them into each project's `.agent-instructions` clone. Existing links continue to work.
+Commit the change, then pull it wherever you installed the collection. On Windows without Developer Mode, also rerun the installer to refresh the copied `AGENTS.md`.
 
 ## References
 
