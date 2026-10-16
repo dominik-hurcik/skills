@@ -17,7 +17,7 @@ Options skip the questions, for scripts:
   --gitignore       in project mode, add the installed files to .gitignore
   --no-gitignore    in project mode, leave .gitignore alone
   --no-pull         don't fetch the latest version first
-  --yes             accept the recommended answer to every remaining question
+  --yes             use a fixed default answer for every remaining question
 """
 
 import argparse
@@ -59,17 +59,17 @@ class Asker:
         except EOFError:
             raise Stop("No answer received. Run the installer in a terminal, or pass --yes.")
 
+    # The defaults below are only for --yes. In a terminal, every question waits for a real answer.
+
     def choice(self, question: str, options: list, default: int) -> int:
         """Return the 0-based index of the chosen option."""
         if self.assume_yes:
             return default
         print(f"\n{question}")
         for number, option in enumerate(options, 1):
-            print(f"  {number}) {option}" + ("  (recommended)" if number - 1 == default else ""))
+            print(f"  {number}) {option}")
         while True:
-            answer = self._read(f"Choose 1-{len(options)} [{default + 1}]: ")
-            if not answer:
-                return default
+            answer = self._read(f"Choose 1-{len(options)}: ")
             if answer.isdigit() and 1 <= int(answer) <= len(options):
                 return int(answer) - 1
             print(f"Please type a number from 1 to {len(options)}.")
@@ -77,11 +77,8 @@ class Asker:
     def yes_no(self, question: str, default: bool) -> bool:
         if self.assume_yes:
             return default
-        hint = "Y/n" if default else "y/N"
         while True:
-            answer = self._read(f"\n{question} [{hint}]: ").lower()
-            if not answer:
-                return default
+            answer = self._read(f"\n{question} [y/n]: ").lower()
             if answer in ("y", "yes"):
                 return True
             if answer in ("n", "no"):
@@ -723,7 +720,7 @@ def main() -> None:
     ignore.add_argument("--gitignore", action="store_true", help="In project mode, add the installed files to .gitignore.")
     ignore.add_argument("--no-gitignore", action="store_true", help="In project mode, leave .gitignore alone.")
     parser.add_argument("--no-pull", action="store_true", help="Don't fetch the latest version first.")
-    parser.add_argument("--yes", action="store_true", help="Accept the recommended answer to every remaining question.")
+    parser.add_argument("--yes", action="store_true", help="Use a fixed default answer for every remaining question.")
     args = parser.parse_args()
     try:
         run(args)
