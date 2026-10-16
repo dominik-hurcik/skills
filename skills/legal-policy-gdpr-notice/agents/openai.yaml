@@ -1,0 +1,5 @@
+interface:
+  display_name: "GDPR Privacy Notice"
+  short_description: "Draft an EU GDPR privacy notice as a Word file"
+policy:
+  allow_implicit_invocation: false

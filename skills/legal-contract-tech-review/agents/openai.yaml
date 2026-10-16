@@ -1,0 +1,5 @@
+interface:
+  display_name: "Tech Contract Review"
+  short_description: "Detailed review of MSA, SLA, EULA, and API terms"
+policy:
+  allow_implicit_invocation: false

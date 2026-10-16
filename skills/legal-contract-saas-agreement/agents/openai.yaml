@@ -1,0 +1,5 @@
+interface:
+  display_name: "SaaS Agreement"
+  short_description: "Draft a SaaS customer agreement from the YC template"
+policy:
+  allow_implicit_invocation: false

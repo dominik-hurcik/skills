@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cookie Policy"
+  short_description: "Draft a GDPR and ePrivacy cookie policy"
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,5 @@
+interface:
+  display_name: "AI Act Role"
+  short_description: "Decide whether you are an AI Act provider or deployer"
+policy:
+  allow_implicit_invocation: false

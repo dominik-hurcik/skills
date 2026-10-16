@@ -1,0 +1,5 @@
+interface:
+  display_name: "Contract First Pass"
+  short_description: "Plain-language risk check of any contract"
+policy:
+  allow_implicit_invocation: false

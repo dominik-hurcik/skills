@@ -1,0 +1,5 @@
+interface:
+  display_name: "AI Act Transparency"
+  short_description: "Find your Art. 50 AI disclosure duties"
+policy:
+  allow_implicit_invocation: false

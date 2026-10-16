@@ -1,0 +1,5 @@
+interface:
+  display_name: "Terms Check"
+  short_description: "Check your terms or privacy policy for unfair clauses"
+policy:
+  allow_implicit_invocation: false

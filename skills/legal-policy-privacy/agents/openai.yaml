@@ -1,0 +1,5 @@
+interface:
+  display_name: "Privacy Policy"
+  short_description: "Draft a privacy policy for the laws that apply to your users"
+policy:
+  allow_implicit_invocation: false

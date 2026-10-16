@@ -1,0 +1,5 @@
+interface:
+  display_name: "SOC 2"
+  short_description: "Prepare for a SOC 2 audit"
+policy:
+  allow_implicit_invocation: false

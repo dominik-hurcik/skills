@@ -1,0 +1,5 @@
+interface:
+  display_name: "GDPR Audit"
+  short_description: "Audit code and systems for GDPR and answer GDPR questions"
+policy:
+  allow_implicit_invocation: false

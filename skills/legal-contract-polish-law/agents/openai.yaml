@@ -1,0 +1,5 @@
+interface:
+  display_name: "Polish Contract Law"
+  short_description: "Review and draft B2B, IT, and SaaS contracts under Polish law"
+policy:
+  allow_implicit_invocation: false

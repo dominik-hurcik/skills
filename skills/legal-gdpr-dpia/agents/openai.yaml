@@ -1,0 +1,5 @@
+interface:
+  display_name: "DPIA"
+  short_description: "Run a GDPR data protection impact assessment"
+policy:
+  allow_implicit_invocation: false

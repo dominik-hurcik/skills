@@ -1,0 +1,5 @@
+interface:
+  display_name: "AI Governance Review"
+  short_description: "Review an AI feature or a third-party AI vendor"
+policy:
+  allow_implicit_invocation: false

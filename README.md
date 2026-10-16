@@ -4,21 +4,23 @@ Collection of my handpicked skills from all around the internet for Codex and Cl
 
 ## Skills
 
-This collection has 35 skills in six categories. Each skill name starts with its category. Automatic skills can run when the task matches their description. Manual skills run only when you call them by name. See [Choose when a skill runs](#choose-when-a-skill-runs).
+This collection has 58 skills in seven categories. Each skill name starts with its category. Automatic skills can run when the task matches their description. Manual skills run only when you call them by name. See [Choose when a skill runs](#choose-when-a-skill-runs).
 
 | Category | Skills | What they cover |
 | --- | --- | --- |
-| `engineering-` | 6 | Designing, debugging, and reviewing code |
+| `engineering-` | 7 | Designing, debugging, securing, and reviewing code |
 | `planning-` | 3 | Working out what to build before building it |
 | `writing-` | 3 | Docs standards and plain, human prose |
 | `learning-` | 1 | Learning a new concept |
 | `research-` | 1 | Researching recent public discussion |
 | `marketing-` | 21 | Growth, SEO, conversion, pricing, and lifecycle marketing |
+| `legal-` | 22 | Policies, contracts, GDPR, the EU AI Act, and security certifications for a SaaS product |
 
 ### Engineering
 
 | Skill | Runs | What it does |
 | --- | --- | --- |
+| `engineering-code-security-review` | Manual | Reviews Python, JavaScript/TypeScript, or Go code against security best practices. |
 | `engineering-blast-radius` | Manual | Finds what a change could break outside the diff, and proves the change is safe by running real code. |
 | `engineering-codebase-design` | Automatic | Gives a shared vocabulary for designing deep modules, interfaces, and seams. |
 | `engineering-diagnosing-bugs` | Automatic | Runs a diagnosis loop for hard bugs and performance regressions. |
@@ -79,6 +81,40 @@ This collection has 35 skills in six categories. Each skill name starts with its
 | `marketing-signup` | Automatic | Improves signup, registration, and trial activation flows. |
 | `marketing-site-architecture` | Automatic | Plans page hierarchy, navigation, URL structure, and internal links. |
 | `marketing-social` | Automatic | Creates and schedules social posts, and runs social listening. |
+
+### Legal
+
+All legal skills are manual-only, so call the one you need by name. They come from [lawve-ai/awesome-legal-skills](https://github.com/lawve-ai/awesome-legal-skills), and each keeps its author's license in its folder. They help you prepare documents and spot issues. They don't replace a lawyer.
+
+| Skill | Use it when |
+| --- | --- |
+| **Policies you publish** | |
+| `legal-policy-privacy` | You need a privacy policy for your website or app. It works out which laws apply from where your users are. Start here. |
+| `legal-policy-gdpr-notice` | You need an EU GDPR privacy notice as a Word file, for example for job applicants or one EU country. |
+| `legal-policy-cookies` | You need a GDPR and ePrivacy cookie policy. |
+| `legal-policy-terms-check` | You want your own terms or privacy policy checked for unfair clauses before you publish them. |
+| **Contracts** | |
+| `legal-contract-saas-agreement` | You're drafting the customer agreement you send out, starting from the YC SaaS template. |
+| `legal-contract-dpa` | You're drafting or reviewing an Art. 28 GDPR data processing agreement, from either side. |
+| `legal-contract-first-pass` | You received any contract and want a quick, plain-language risk check. |
+| `legal-contract-tech-review` | You need a detailed review of an MSA, SLA, EULA, or API terms. |
+| `legal-contract-nda-triage` | You received an NDA and want it rated green, yellow, or red. |
+| `legal-contract-polish-law` | The contract is under Polish law. Written in Polish. |
+| **GDPR** | |
+| `legal-gdpr-audit` | You want your code and systems audited for GDPR issues, or have a general GDPR question. |
+| `legal-gdpr-dpia` | You're starting high-risk processing, including AI, and need a data protection impact assessment. |
+| `legal-gdpr-transfer-assessment` | You send personal data outside the EU, for example to a US LLM provider. |
+| `legal-gdpr-breach-response` | You have a data breach and the 72-hour notification clock is running. |
+| **AI features** | |
+| `legal-ai-act-triage` | You want to know whether and how the EU AI Act applies to you. Start here. |
+| `legal-ai-act-role` | You need to know whether you're an AI Act provider or deployer, for example when you wrap a third-party LLM. |
+| `legal-ai-act-transparency` | You need to know what you must disclose about AI under Art. 50. |
+| `legal-ai-governance-review` | You're reviewing an AI feature or a third-party AI vendor. |
+| **Security and vendors** | |
+| `legal-security-soc2` | A customer asks for SOC 2. |
+| `legal-security-iso27001` | A customer asks for ISO 27001. |
+| `legal-security-eu-cra` | You need to check whether the EU Cyber Resilience Act covers your product. |
+| `legal-vendor-due-diligence` | You're vetting your own suppliers or technology vendors. |
 
 ## Install in a project
 

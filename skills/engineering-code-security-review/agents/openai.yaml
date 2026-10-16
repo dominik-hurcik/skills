@@ -1,0 +1,5 @@
+interface:
+  display_name: "Code Security Review"
+  short_description: "Security review of Python, JS/TS, or Go code"
+policy:
+  allow_implicit_invocation: false

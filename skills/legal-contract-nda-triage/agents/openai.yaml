@@ -1,0 +1,5 @@
+interface:
+  display_name: "NDA Triage"
+  short_description: "Rate an incoming NDA green, yellow, or red"
+policy:
+  allow_implicit_invocation: false

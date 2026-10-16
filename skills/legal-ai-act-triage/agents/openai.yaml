@@ -1,0 +1,5 @@
+interface:
+  display_name: "AI Act Triage"
+  short_description: "Quick check of whether and how the EU AI Act applies"
+policy:
+  allow_implicit_invocation: false

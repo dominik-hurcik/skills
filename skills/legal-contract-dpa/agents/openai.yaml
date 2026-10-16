@@ -1,0 +1,5 @@
+interface:
+  display_name: "DPA"
+  short_description: "Draft or review an Art. 28 GDPR data processing agreement"
+policy:
+  allow_implicit_invocation: false

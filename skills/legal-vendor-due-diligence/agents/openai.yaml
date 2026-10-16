@@ -1,0 +1,5 @@
+interface:
+  display_name: "Vendor Due Diligence"
+  short_description: "Vet a supplier or technology vendor"
+policy:
+  allow_implicit_invocation: false

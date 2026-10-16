@@ -1,0 +1,5 @@
+interface:
+  display_name: "GDPR Breach Response"
+  short_description: "Assess a data breach and the 72-hour notification duty"
+policy:
+  allow_implicit_invocation: false

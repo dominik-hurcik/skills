@@ -1,0 +1,7 @@
+Copyright (c) 2026 Sneha Ganapavarapu
+
+This work is licensed under the Creative Commons Attribution 4.0 International License.
+Full license text: https://creativecommons.org/licenses/by/4.0/legalcode
+
+Source: https://github.com/lawve-ai/awesome-legal-skills/tree/045f738/skills/contract-risk-analyzer-sneha-ganapavarapu
+Changes: skill name, manual-only invocation, and punctuation (em and en dashes removed).

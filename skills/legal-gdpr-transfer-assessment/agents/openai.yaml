@@ -1,0 +1,5 @@
+interface:
+  display_name: "Transfer Impact Assessment"
+  short_description: "Assess personal data transfers outside the EU"
+policy:
+  allow_implicit_invocation: false
