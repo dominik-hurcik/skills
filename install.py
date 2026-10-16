@@ -493,20 +493,21 @@ def choose_mode(args, ask: Asker) -> tuple:
     return action, ["user", "project"][mode]
 
 
-def confirm_project(ask: Asker) -> Path:
+def confirm_project(ask: Asker, action: str) -> Path:
+    into = "remove the install from" if action == "remove" else "install into"
     here = Path.cwd().resolve()
     root = repo_root(here)
     if root is None:
         print(f"\nThe current folder isn't inside a Git repository:\n  {here}")
         print("Project mode installs into a project's top folder. Open a terminal in your project, then run the installer again.")
-        if not ask.yes_no("Install into this folder anyway?", False):
+        if not ask.yes_no(f"{into[0].upper() + into[1:]} this folder anyway?", False):
             raise Stop("Nothing changed.")
         return here
     if root != here:
         print(f"\nYou're in a subfolder. The project's top folder is:\n  {root}")
     else:
         print(f"\nThe project's top folder is:\n  {root}")
-    if not ask.yes_no("Is this the project you want to install into?", True):
+    if not ask.yes_no(f"Is this the project you want to {into}?", True):
         raise Stop("Nothing changed. Open a terminal in the right project, then run the installer again.")
     return root
 
@@ -564,11 +565,19 @@ def run(args) -> None:
     script_dir = Path(__file__).resolve().parent
     if is_collection(script_dir) and not args.no_pull:
         if pull_latest(script_dir, ask):
-            print("The installer itself changed, so it's restarting with the new version.")
-            os.execv(sys.executable, [sys.executable, str(script_dir / "install.py"), *sys.argv[1:], "--no-pull"])
+            print("The installer itself changed, so it's restarting with the new version.", flush=True)
+            command = [sys.executable, str(script_dir / "install.py"), *sys.argv[1:], "--no-pull"]
+            if not sys.stdin.isatty():
+                # Python has already read piped answers into its buffer, so pass the rest on.
+                sys.exit(subprocess.run(command, input=sys.stdin.read(), text=True).returncode)
+            if WINDOWS:
+                # On Windows, execv starts a new process and ends this one, so the terminal
+                # takes back its prompt while the new installer still waits for answers.
+                sys.exit(subprocess.call(command))
+            os.execv(sys.executable, command)
 
     action, mode = choose_mode(args, ask)
-    root = confirm_project(ask) if mode == "project" else Path.home().resolve()
+    root = confirm_project(ask, action) if mode == "project" else Path.home().resolve()
 
     if action == "remove":
         # Removing never downloads anything. It needs the copy the install points to.
