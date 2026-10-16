@@ -1,0 +1,5 @@
+interface:
+  display_name: "Drunk Grandma"
+  short_description: "Rewrite text so a tipsy grandma understands it"
+policy:
+  allow_implicit_invocation: false

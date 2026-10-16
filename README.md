@@ -4,13 +4,13 @@ Collection of my handpicked skills from all around the internet for Codex and Cl
 
 ## Skills
 
-This collection has 60 skills in seven categories. Each skill name starts with its category. Automatic skills can run when the task matches their description. Manual skills run only when you call them by name. See [Choose when a skill runs](#choose-when-a-skill-runs).
+This collection has 61 skills in seven categories. Each skill name starts with its category. Automatic skills can run when the task matches their description. Manual skills run only when you call them by name. See [Choose when a skill runs](#choose-when-a-skill-runs).
 
 | Category | Skills | What they cover |
 | --- | --- | --- |
 | `engineering-` | 7 | Designing, debugging, securing, and reviewing code |
 | `planning-` | 3 | Working out what to build before building it |
-| `writing-` | 3 | Docs standards and plain, human prose |
+| `writing-` | 4 | Docs standards and plain, human prose |
 | `learning-` | 1 | Learning a new concept |
 | `research-` | 1 | Researching recent public discussion |
 | `marketing-` | 21 | Growth, SEO, conversion, pricing, and lifecycle marketing |
@@ -41,6 +41,7 @@ This collection has 60 skills in seven categories. Each skill name starts with i
 | Skill | Runs | What it does |
 | --- | --- | --- |
 | `writing-bro` | Manual | Restates the last message in plain language, with no jargon. |
+| `writing-drunk-grandma` | Manual | Rewrites text so a tipsy grandma with no technical background understands it on the first read. |
 | `writing-technical-writing` | Automatic | Applies a technical-writing standard to docs, RFCs, readmes, PR descriptions, and commit messages. |
 | `writing-unslop` | Automatic | Cuts AI tells from any writing. |
 
