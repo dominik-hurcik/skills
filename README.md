@@ -1,7 +1,7 @@
 ![Skills banner with a glowing chest of skill cards and a friendly robot](assets/banner.png)
 
 <p align="center">
-  <img src="assets/not-a-top-repository.png" alt="Zero-star medal. Definitely not a top repository of any day, whatsoever." width="600">
+  <img src="assets/not-a-top-repository.png" alt="Zero-star medal. Definitely not a top repository of any day, whatsoever." width="200">
 </p>
 
 # Agent instructions and skills
