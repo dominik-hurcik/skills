@@ -2,7 +2,9 @@
 
 Collection of some mine, and some handpicked skills from all around the internet (mostly from pstack and Matt Pocock) for Codex and Claude Code, pre-fixed with `dh-` to distinguish they are coming from this particular collection.
 
-The collection has 61 skills and my shared instructions. A skill is a set of instructions for one kind of job, such as reviewing a contract or fixing a bug. 
+The collection has 61 skills and my shared instructions, catered to my own workflow, but could be useful for someone else as well, so I made it public.
+
+A skill is a set of instructions for one kind of job, such as reviewing a contract or fixing a bug. 
 
 ## Contents
 
