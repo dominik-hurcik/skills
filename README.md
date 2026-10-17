@@ -1,3 +1,5 @@
+![Skills banner with a glowing chest of skill cards and a friendly robot](assets/banner.png)
+
 # Agent instructions and skills
 
 Collection of some mine, and some handpicked skills from all around the internet (mostly from pstack and Matt Pocock) for Codex and Claude Code, pre-fixed with `dh-` to distinguish they are coming from this particular collection.
