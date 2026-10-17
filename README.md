@@ -1,8 +1,8 @@
 # Agent instructions and skills
 
-Collection of my handpicked skills from all around the internet for Codex and Claude Code. Edit each skill once. Both agents read the same files.
+Collection of some mine, and some handpicked skills from all around the internet (mostly from pstack and Matt Pocock) for Codex and Claude Code, pre-fixed with `dh-` to distinguish they are coming from this particular collection.
 
-The collection has 61 skills and my shared instructions. A skill is a set of instructions for one kind of job, such as reviewing a contract or fixing a bug. Every skill name starts with `dh-`, so you can tell my skills apart from built-in ones.
+The collection has 61 skills and my shared instructions. A skill is a set of instructions for one kind of job, such as reviewing a contract or fixing a bug. 
 
 ## Contents
 
