@@ -8,7 +8,7 @@
 
 Collection of some mine, and some handpicked skills from all around the internet (mostly from pstack and Matt Pocock) for Codex and Claude Code, pre-fixed with `dh-` to distinguish they are coming from this particular collection.
 
-The collection has 64 skills and my shared instructions, catered to my own workflow, but could be useful for someone else as well, so I made it public.
+The collection has 72 skills and my shared instructions, catered to my own workflow, but could be useful for someone else as well, so I made it public.
 
 A skill is a set of instructions for one kind of job, such as reviewing a contract or fixing a bug. 
 
@@ -152,7 +152,7 @@ You don't have to call every skill. Many run on their own, as [When skills run](
 
 Each skill runs in one of three ways.
 
-### On its own (31 skills)
+### On its own (33 skills)
 
 The agent reads a short description of every skill when a session starts. When your request matches one, it uses that skill without being asked.
 
@@ -162,6 +162,7 @@ This isn't guaranteed. The agent decides, and a vague request may match nothing.
 
 These skills run on their own because their job is narrow, and using one by mistake costs little:
 - all 21 marketing skills
+- `dh-engineering-api-and-interface-design` and `dh-engineering-ci-cd-and-automation`
 - `dh-design-impeccable`, for frontend design work
 - `dh-design-react-best-practices`, for React and Next.js code
 - `dh-design-build-for-good-ux`, for UI states, forms, and touch targets
@@ -177,12 +178,13 @@ These skills run on their own because their job is narrow, and using one by mist
 
 `AGENTS.md` also keeps five core rules for every reply. One example is "no em dashes". Those rules work even when the agent doesn't open a skill.
 
-### Only when you call it (33 skills)
+### Only when you call it (39 skills)
 
 These never start on their own. Each has a reason:
 - **They take over the session.** `dh-planning-brainstorming` won't let anything be built until you approve a design. `dh-teach` sets up a learning workspace. `dh-engineering-improve-codebase-architecture` scans the whole codebase and writes a report. `dh-engineering-retro` looks back over the whole session.
 - **You choose the moment.** `dh-planning-sharpen` and `dh-bro` rework something you point at. `dh-engineering-blast-radius` runs real code to check a change is safe. `dh-engineering-code-security-review` runs only when asked, by design.
 - **They cost time or money.** `dh-research-last30days` takes a few minutes. It can also spend credits on paid services, if you've added keys for them.
+- **They shape real output.** The copy and offer skills rewrite your pages and product messages. Call them when you want that output.
 - **They're legal.** All 24 legal skills cover overlapping topics, so they'd compete in every SaaS project. Legal work should also come from a skill you picked on purpose.
 
 ## The skills
@@ -191,13 +193,13 @@ The skills fall into eight groups. Most names include the group, such as `dh-leg
 
 | Group | Name pattern | Skills | What they cover |
 | --- | --- | --- | --- |
-| Engineering | `dh-engineering-*` | 7 | Designing, debugging, securing, and reviewing code |
+| Engineering | `dh-engineering-*` | 10 | Designing, debugging, securing, reviewing, and shipping code |
 | Planning | `dh-planning-*` | 3 | Working out what to build before you build it |
 | Writing | `dh-*` | 4 | Clear docs and plain writing |
 | Learning | `dh-*` | 1 | Learning something new |
 | Research | `dh-research-*` | 1 | What people are saying online right now |
 | Design | `dh-design-*` | 3 | Designing, reviewing, and polishing web interfaces, UX states, and React performance |
-| Marketing | `dh-marketing-*` | 21 | Growth, SEO, sign-ups, pricing, and email |
+| Marketing | `dh-marketing-*` | 26 | Growth, SEO, sign-ups, pricing, email, copy, and offers |
 | Legal | `dh-legal-*` | 24 | Policies, contracts, GDPR, the EU AI Act, and security certificates for a SaaS product |
 
 In the tables below, "Runs" shows how a skill starts. "Automatic" means on its own. "Manual" means only when you call it.
@@ -206,11 +208,14 @@ In the tables below, "Runs" shows how a skill starts. "Automatic" means on its o
 
 | Skill | Runs | What it does |
 | --- | --- | --- |
+| `dh-engineering-api-and-interface-design` | Automatic | Designs stable APIs and module interfaces: contracts, error shapes, pagination, idempotency keys, and backward compatibility. Copied from [Addy Osmani's agent skills](https://github.com/addyosmani/agent-skills) (MIT). |
 | `dh-engineering-blast-radius` | Manual | Finds what a change could break outside the diff, and runs real code to prove it's safe. |
+| `dh-engineering-ci-cd-and-automation` | Automatic | Sets up CI and CD pipelines: quality gates, preview deployments, feature flags, and rollbacks. Copied from [Addy Osmani's agent skills](https://github.com/addyosmani/agent-skills) (MIT). |
 | `dh-engineering-code-security-review` | Manual | Checks Python, JavaScript/TypeScript, or Go code against security best practices. |
 | `dh-engineering-codebase-design` | Automatic | Gives shared words for designing modules, interfaces, and seams. |
 | `dh-engineering-diagnosing-bugs` | Automatic | Walks through a step-by-step hunt for hard bugs and slowdowns. |
 | `dh-engineering-domain-modeling` | Automatic | Builds a project's shared vocabulary, its `GLOSSARY.md`, and its decision records (ADRs). |
+| `dh-engineering-git-workflow-and-versioning` | Manual | Guides git practice: small atomic commits, branches, commit messages, pull requests, and semantic version tags with a changelog. Copied from [Addy Osmani's agent skills](https://github.com/addyosmani/agent-skills) (MIT). |
 | `dh-engineering-improve-codebase-architecture` | Manual | Finds places to simplify the code, shows them in a web page, then questions you about the one you pick. |
 | `dh-engineering-retro` | Manual | Looks back on a coding session: what worked and what didn't. |
 
@@ -255,18 +260,23 @@ In the tables below, "Runs" shows how a skill starts. "Automatic" means on its o
 
 | Skill | Runs | What it does |
 | --- | --- | --- |
+| `dh-marketing-ab-testing` | Manual | Plans and reads A/B tests: hypotheses, sample size, and when to call a result. Copied from [marketingskills](https://github.com/coreyhaines31/marketingskills) (MIT). |
 | `dh-marketing-ads` | Automatic | Plans and checks paid ads on Google, Meta, LinkedIn, X, and other platforms. |
 | `dh-marketing-ai-seo` | Automatic | Helps AI search tools and chatbots find and quote your content. |
 | `dh-marketing-analytics` | Automatic | Sets up and checks tracking, such as GA4, events, and UTM tags. |
 | `dh-marketing-app-store-listing` | Automatic | Checks and improves an App Store or Google Play page. |
 | `dh-marketing-churn-prevention` | Automatic | Keeps customers from leaving: cancel flows, save offers, and failed-payment recovery. |
+| `dh-marketing-cold-email` | Manual | Writes and runs cold B2B outbound: emails, follow-ups, deliverability, LinkedIn, and reply handling. Copied from [marketingskills](https://github.com/coreyhaines31/marketingskills) (MIT). |
 | `dh-marketing-content-strategy` | Automatic | Plans what content to create and which topics to cover. |
+| `dh-marketing-copy-editing` | Manual | Edits existing copy in passes for clarity, voice, proof, and specificity, and removes AI tells. Copied from [marketingskills](https://github.com/coreyhaines31/marketingskills) (MIT). |
+| `dh-marketing-copywriting` | Manual | Writes or rewrites marketing copy for pages: headlines, calls to action, and section copy, without AI tells. Copied from [marketingskills](https://github.com/coreyhaines31/marketingskills) (MIT). |
 | `dh-marketing-cro` | Automatic | Gets more visitors on marketing pages and forms to sign up or buy. |
 | `dh-marketing-customer-research` | Automatic | Runs and sums up customer research, such as interviews and reviews. |
 | `dh-marketing-directory-submissions` | Automatic | Lists a product in startup, SaaS, AI, and review directories. |
 | `dh-marketing-emails` | Automatic | Writes and improves automated email sequences. |
 | `dh-marketing-image` | Automatic | Makes and edits marketing images, such as blog headers and social posts. |
 | `dh-marketing-launch` | Automatic | Plans product launches, feature announcements, and Product Hunt launches. |
+| `dh-marketing-offers` | Manual | Designs the offer itself: value, bonuses, guarantees, scarcity, naming, and payment structure. Copied from [marketingskills](https://github.com/coreyhaines31/marketingskills) (MIT). |
 | `dh-marketing-onboarding` | Automatic | Helps new users get value from the product soon after signing up. |
 | `dh-marketing-paywalls` | Automatic | Designs upgrade screens and paid-feature prompts inside the app. |
 | `dh-marketing-popups` | Automatic | Designs popups, slide-ins, and banners that people act on. |
@@ -361,4 +371,6 @@ After editing, commit, then run the installer wherever you use the collection. I
 - [Impeccable](https://github.com/pbakaus/impeccable), Apache 2.0, the source of `dh-design-impeccable`
 - [Vercel React best practices](https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices), MIT, the source of `dh-design-react-best-practices`
 - [build-for-good-ux](https://github.com/alper-dev/build-for-good-ux-skill), Apache 2.0, the source of `dh-design-build-for-good-ux`
+- [Addy Osmani's agent skills](https://github.com/addyosmani/agent-skills), MIT, the source of `dh-engineering-git-workflow-and-versioning`, `dh-engineering-api-and-interface-design`, and `dh-engineering-ci-cd-and-automation`
+- [marketingskills](https://github.com/coreyhaines31/marketingskills) by Corey Haines, MIT, the source of the `dh-marketing-*` skills
 - [Matt Pocock's engineering skills](https://github.com/mattpocock/skills/tree/main/skills/engineering)

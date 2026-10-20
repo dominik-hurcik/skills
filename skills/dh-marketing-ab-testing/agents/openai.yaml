@@ -1,0 +1,5 @@
+interface:
+  display_name: "A/B Testing"
+  short_description: "Plan, design, or implement an A/B test or experiment."
+policy:
+  allow_implicit_invocation: false

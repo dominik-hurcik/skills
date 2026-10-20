@@ -1,0 +1,5 @@
+interface:
+  display_name: "Offers"
+  short_description: "Design, construct, or improve the offer you sell."
+policy:
+  allow_implicit_invocation: false

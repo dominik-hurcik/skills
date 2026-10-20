@@ -1,0 +1,5 @@
+interface:
+  display_name: "Cold Email"
+  short_description: "Write and run B2B cold outbound that gets replies."
+policy:
+  allow_implicit_invocation: false

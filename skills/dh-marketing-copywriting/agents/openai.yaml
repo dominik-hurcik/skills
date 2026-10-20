@@ -1,0 +1,5 @@
+interface:
+  display_name: "Copywriting"
+  short_description: "Write or rewrite marketing copy for any page."
+policy:
+  allow_implicit_invocation: false

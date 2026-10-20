@@ -1,0 +1,5 @@
+interface:
+  display_name: "Git Workflow"
+  short_description: "Structures git workflow practices."
+policy:
+  allow_implicit_invocation: false
