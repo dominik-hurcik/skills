@@ -8,7 +8,7 @@
 
 Collection of some mine, and some handpicked skills from all around the internet (mostly from pstack and Matt Pocock) for Codex and Claude Code, pre-fixed with `dh-` to distinguish they are coming from this particular collection.
 
-The collection has 61 skills and my shared instructions, catered to my own workflow, but could be useful for someone else as well, so I made it public.
+The collection has 64 skills and my shared instructions, catered to my own workflow, but could be useful for someone else as well, so I made it public.
 
 A skill is a set of instructions for one kind of job, such as reviewing a contract or fixing a bug. 
 
@@ -22,7 +22,7 @@ A skill is a set of instructions for one kind of job, such as reviewing a contra
 - [Use a skill](#use-a-skill)
 - [When skills run](#when-skills-run)
 - [The skills](#the-skills)
-  - [Engineering](#engineering) · [Planning](#planning) · [Writing](#writing) · [Learning](#learning) · [Research](#research) · [Marketing](#marketing) · [Legal](#legal)
+  - [Engineering](#engineering) · [Planning](#planning) · [Writing](#writing) · [Learning](#learning) · [Research](#research) · [Design](#design) · [Marketing](#marketing) · [Legal](#legal)
 - [Add a skill](#add-a-skill)
 - [Set automatic or manual](#set-automatic-or-manual)
 - [Edit the shared instructions](#edit-the-shared-instructions)
@@ -152,7 +152,7 @@ You don't have to call every skill. Many run on their own, as [When skills run](
 
 Each skill runs in one of three ways.
 
-### On its own (28 skills)
+### On its own (31 skills)
 
 The agent reads a short description of every skill when a session starts. When your request matches one, it uses that skill without being asked.
 
@@ -162,6 +162,9 @@ This isn't guaranteed. The agent decides, and a vague request may match nothing.
 
 These skills run on their own because their job is narrow, and using one by mistake costs little:
 - all 21 marketing skills
+- `dh-design-impeccable`, for frontend design work
+- `dh-design-react-best-practices`, for React and Next.js code
+- `dh-design-build-for-good-ux`, for UI states, forms, and touch targets
 - `dh-engineering-codebase-design`, `dh-engineering-diagnosing-bugs`, and `dh-engineering-domain-modeling`
 - `dh-planning-grilling`
 - `dh-technical-writing`, `dh-unslop`, and `dh-drunk-grandma`
@@ -184,7 +187,7 @@ These never start on their own. Each has a reason:
 
 ## The skills
 
-The skills fall into seven groups. Most names include the group, such as `dh-legal-gdpr-audit`. Writing and learning skills skip it, because the name says enough, such as `dh-unslop`.
+The skills fall into eight groups. Most names include the group, such as `dh-legal-gdpr-audit`. Writing and learning skills skip it, because the name says enough, such as `dh-unslop`.
 
 | Group | Name pattern | Skills | What they cover |
 | --- | --- | --- | --- |
@@ -193,6 +196,7 @@ The skills fall into seven groups. Most names include the group, such as `dh-leg
 | Writing | `dh-*` | 4 | Clear docs and plain writing |
 | Learning | `dh-*` | 1 | Learning something new |
 | Research | `dh-research-*` | 1 | What people are saying online right now |
+| Design | `dh-design-*` | 3 | Designing, reviewing, and polishing web interfaces, UX states, and React performance |
 | Marketing | `dh-marketing-*` | 21 | Growth, SEO, sign-ups, pricing, and email |
 | Legal | `dh-legal-*` | 24 | Policies, contracts, GDPR, the EU AI Act, and security certificates for a SaaS product |
 
@@ -238,6 +242,14 @@ In the tables below, "Runs" shows how a skill starts. "Automatic" means on its o
 | Skill | Runs | What it does |
 | --- | --- | --- |
 | `dh-research-last30days` | Manual | Finds what people said about a topic in the last 30 days, on Reddit, X, YouTube, TikTok, Hacker News, Polymarket, GitHub, and the web. Needs Python 3.12 or newer. |
+
+### Design
+
+| Skill | Runs | What it does |
+| --- | --- | --- |
+| `dh-design-impeccable` | Automatic | Designs, reviews, and polishes web interfaces: layout, type, color, motion, responsive behavior, copy, and accessibility. Adapted from [Impeccable](https://github.com/pbakaus/impeccable) (Apache 2.0). |
+| `dh-design-react-best-practices` | Automatic | Checks React and Next.js code for performance problems: request waterfalls, bundle size, re-renders, and rendering. Copied from [Vercel's React best practices](https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices) (MIT). |
+| `dh-design-build-for-good-ux` | Automatic | Makes UI handle loading, success, error, and empty states, forms, touch targets, and choice overload. Copied from [build-for-good-ux](https://github.com/alper-dev/build-for-good-ux-skill) (Apache 2.0). |
 
 ### Marketing
 
@@ -346,4 +358,7 @@ After editing, commit, then run the installer wherever you use the collection. I
 - [Codex skills](https://learn.chatgpt.com/docs/build-skills)
 - [Claude Code skills](https://code.claude.com/docs/en/skills)
 - [pstack source](https://github.com/cursor/plugins/tree/main/pstack)
+- [Impeccable](https://github.com/pbakaus/impeccable), Apache 2.0, the source of `dh-design-impeccable`
+- [Vercel React best practices](https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices), MIT, the source of `dh-design-react-best-practices`
+- [build-for-good-ux](https://github.com/alper-dev/build-for-good-ux-skill), Apache 2.0, the source of `dh-design-build-for-good-ux`
 - [Matt Pocock's engineering skills](https://github.com/mattpocock/skills/tree/main/skills/engineering)
