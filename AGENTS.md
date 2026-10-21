@@ -14,6 +14,7 @@
 
 - Before you write prose longer than a short reply, such as docs, READMEs, commit messages, or PR descriptions, load the `dh-unslop` skill and apply it.
 - When you explain a concept, a decision, or a trade-off to me, load the `dh-drunk-grandma` skill and apply it.
+- On every coding task, such as writing, fixing, refactoring, or reviewing code, or choosing a dependency, load the `dh-engineering-ponytail` skill and apply it.
 - If a skill isn't available, follow the core rules above.
 
 ## Decisions

@@ -8,7 +8,7 @@
 
 Collection of some mine, and some handpicked skills from all around the internet (mostly from pstack and Matt Pocock) for Codex and Claude Code, pre-fixed with `dh-` to distinguish they are coming from this particular collection.
 
-The collection has 72 skills and my shared instructions, catered to my own workflow, but could be useful for someone else as well, so I made it public.
+The collection has 73 skills and my shared instructions, catered to my own workflow, but could be useful for someone else as well, so I made it public.
 
 A skill is a set of instructions for one kind of job, such as reviewing a contract or fixing a bug. 
 
@@ -152,7 +152,7 @@ You don't have to call every skill. Many run on their own, as [When skills run](
 
 Each skill runs in one of three ways.
 
-### On its own (33 skills)
+### On its own (34 skills)
 
 The agent reads a short description of every skill when a session starts. When your request matches one, it uses that skill without being asked.
 
@@ -167,14 +167,16 @@ These skills run on their own because their job is narrow, and using one by mist
 - `dh-design-react-best-practices`, for React and Next.js code
 - `dh-design-build-for-good-ux`, for UI states, forms, and touch targets
 - `dh-engineering-codebase-design`, `dh-engineering-diagnosing-bugs`, and `dh-engineering-domain-modeling`
+- `dh-engineering-ponytail`, for any coding task
 - `dh-planning-grilling`
 - `dh-technical-writing`, `dh-unslop`, and `dh-drunk-grandma`
 
-### Because the shared instructions say so (2 skills)
+### Because the shared instructions say so (3 skills)
 
-`AGENTS.md` holds my rules for every agent. It names two skills to use at set moments:
+`AGENTS.md` holds my rules for every agent. It names three skills to use at set moments:
 - `dh-unslop` before writing anything longer than a short reply, such as docs or commit messages
 - `dh-drunk-grandma` when explaining an idea, a decision, or a trade-off
+- `dh-engineering-ponytail` on every coding task, such as writing, fixing, or reviewing code
 
 `AGENTS.md` also keeps five core rules for every reply. One example is "no em dashes". Those rules work even when the agent doesn't open a skill.
 
@@ -217,6 +219,7 @@ In the tables below, "Runs" shows how a skill starts. "Automatic" means on its o
 | `dh-engineering-domain-modeling` | Automatic | Builds a project's shared vocabulary, its `GLOSSARY.md`, and its decision records (ADRs). |
 | `dh-engineering-git-workflow-and-versioning` | Manual | Guides git practice: small atomic commits, branches, commit messages, pull requests, and semantic version tags with a changelog. Copied from [Addy Osmani's agent skills](https://github.com/addyosmani/agent-skills) (MIT). |
 | `dh-engineering-improve-codebase-architecture` | Manual | Finds places to simplify the code, shows them in a web page, then questions you about the one you pick. |
+| `dh-engineering-ponytail` | Automatic | Writes the smallest change that fully solves a coding task, and skips features nobody asked for. Has three levels: lite, full, and ultra. Copied from [Ponytail](https://github.com/DietrichGebert/ponytail) (MIT). |
 | `dh-engineering-retro` | Manual | Looks back on a coding session: what worked and what didn't. |
 
 ### Planning
@@ -372,5 +375,6 @@ After editing, commit, then run the installer wherever you use the collection. I
 - [Vercel React best practices](https://github.com/vercel-labs/agent-skills/tree/main/skills/react-best-practices), MIT, the source of `dh-design-react-best-practices`
 - [build-for-good-ux](https://github.com/alper-dev/build-for-good-ux-skill), Apache 2.0, the source of `dh-design-build-for-good-ux`
 - [Addy Osmani's agent skills](https://github.com/addyosmani/agent-skills), MIT, the source of `dh-engineering-git-workflow-and-versioning`, `dh-engineering-api-and-interface-design`, and `dh-engineering-ci-cd-and-automation`
+- [Ponytail](https://github.com/DietrichGebert/ponytail) by Dietrich Gebert, MIT, the source of `dh-engineering-ponytail`
 - [marketingskills](https://github.com/coreyhaines31/marketingskills) by Corey Haines, MIT, the source of the `dh-marketing-*` skills
 - [Matt Pocock's engineering skills](https://github.com/mattpocock/skills/tree/main/skills/engineering)
